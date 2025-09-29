@@ -1,0 +1,802 @@
+/* 設定手順ページ専用スタイル */
+.setup-main {
+    background: #f8f9fa;
+    min-height: 100vh;
+    padding-top: 70px;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    text-align: center;
+    padding: 60px 0;
+    margin-bottom: 40px;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.page-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* 設定概要 */
+.setup-overview {
+    margin-bottom: 50px;
+}
+
+.overview-card {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #28a745;
+}
+
+.overview-card h3 {
+    color: #333;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+}
+
+.setup-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 20px 0;
+}
+
+.flow-step {
+    background: #28a745;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    min-width: 150px;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.flow-step:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.step-number {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.flow-arrow {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* セットアップセクション */
+.setup-section {
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+}
+
+.section-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.section-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.step-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.time-estimate {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-content {
+    padding: 40px;
+}
+
+/* セットアップカード */
+.setup-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+    margin-bottom: 25px;
+}
+
+.setup-card:hover {
+    border-color: #28a745;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.card-icon {
+    background: #28a745;
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-content h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.card-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* アクションボタン */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #28a745;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+}
+
+/* 手順説明 */
+.instructions {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    border-left: 4px solid #28a745;
+}
+
+.instructions h4 {
+    color: #333;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.instructions ol, .instructions ul {
+    color: #666;
+    line-height: 1.6;
+}
+
+.instructions li {
+    margin-bottom: 8px;
+}
+
+/* APIカード */
+.api-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.api-card {
+    background: white;
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.api-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.api-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.api-header i {
+    font-size: 2rem;
+}
+
+.api-header h3 {
+    flex: 1;
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.required-badge {
+    background: #dc3545;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.api-content {
+    padding: 25px;
+}
+
+.api-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.api-links {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.api-link {
+    background: #f8f9fa;
+    color: #007bff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.api-link:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.setup-steps {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.setup-steps h4 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.setup-steps ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.setup-steps li {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+/* コスト見積もり */
+.cost-estimate {
+    background: linear-gradient(135deg, #ffc107, #ffb300);
+    color: #333;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 30px;
+}
+
+.cost-estimate h3 {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cost-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cost-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 12px 20px;
+    border-radius: 8px;
+}
+
+.cost-total {
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
+    padding-top: 15px;
+}
+
+.cost-total .service,
+.cost-total .cost {
+    font-size: 1.1rem;
+}
+
+/* Dify設定グリッド */
+.dify-setup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* 警告ボックス */
+.warning-box {
+    background: #fff3cd;
+    border: 2px solid #ffeaa7;
+    border-radius: 10px;
+    padding: 25px;
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.warning-box i {
+    color: #856404;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.warning-box h4 {
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.warning-box ul {
+    color: #856404;
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* ワークフロー設定 */
+.workflow-setup {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.setup-option {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    border-left: 5px solid #28a745;
+}
+
+.setup-option h3 {
+    color: #333;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.setup-option p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.manual-steps {
+    margin-top: 20px;
+}
+
+.manual-steps h4 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.manual-steps ul {
+    color: #666;
+    line-height: 1.6;
+}
+
+.manual-steps li {
+    margin-bottom: 8px;
+}
+
+.manual-steps a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.manual-steps a:hover {
+    text-decoration: underline;
+}
+
+/* テストセクション */
+.test-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.test-card {
+    background: #e8f5e8;
+    border-radius: 15px;
+    padding: 30px;
+    border-left: 5px solid #28a745;
+}
+
+.test-card h3 {
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.test-params {
+    margin-bottom: 20px;
+}
+
+.test-params h4 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.param-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.param {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.param-name {
+    background: #28a745;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    min-width: 120px;
+    text-align: center;
+}
+
+.param-value {
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    font-family: monospace;
+    flex: 1;
+}
+
+/* トラブルシューティング */
+.troubleshooting {
+    background: #fff5f5;
+    border-radius: 15px;
+    padding: 30px;
+    border-left: 5px solid #dc3545;
+}
+
+.troubleshooting h3 {
+    color: #333;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.trouble-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.trouble-item {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #f8d7da;
+}
+
+.trouble-title {
+    background: #dc3545;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.trouble-solution {
+    padding: 20px;
+}
+
+.trouble-solution ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #666;
+}
+
+.trouble-solution li {
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+/* サポートセクション */
+.support-section {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    border-radius: 20px;
+    padding: 40px;
+    margin-top: 40px;
+}
+
+.support-section .section-header {
+    background: none;
+    color: #333;
+    padding: 0 0 30px 0;
+}
+
+.support-section .section-header h2 {
+    color: #333;
+}
+
+.support-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.support-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.support-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.support-card i {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.support-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.support-card p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.support-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.support-links a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+    transition: color 0.3s ease;
+}
+
+.support-links a:hover {
+    color: #0056b3;
+}
+
+.support-links a:last-child {
+    border-bottom: none;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .setup-flow {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .flow-arrow {
+        transform: rotate(90deg);
+    }
+
+    .flow-step {
+        min-width: 200px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .section-content {
+        padding: 25px;
+    }
+
+    .setup-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .api-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dify-setup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .api-links {
+        justify-content: center;
+    }
+
+    .cost-item {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .param {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .param-name {
+        min-width: 100%;
+    }
+
+    .warning-box {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* プリントスタイル */
+@media print {
+    .navbar,
+    .footer {
+        display: none;
+    }
+
+    .setup-main {
+        padding-top: 0;
+    }
+
+    .setup-section {
+        break-inside: avoid;
+        margin-bottom: 20px;
+    }
+
+    .action-buttons,
+    .api-links {
+        display: none;
+    }
+}
