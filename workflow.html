@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Difyワークフロー構成例 - Dify SEO記事自動執筆システム</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/workflow.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">
+                <i class="fas fa-robot"></i>
+                Dify SEO記事自動執筆システム
+            </h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="requirements.html" class="nav-link">要件定義</a></li>
+                <li><a href="implementation.html" class="nav-link">実装想定</a></li>
+                <li><a href="workflow.html" class="nav-link active">ワークフロー</a></li>
+                <li><a href="poc.html" class="nav-link">PoC報告</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="workflow-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-project-diagram"></i> Difyワークフロー構成例</h1>
+                <p class="page-subtitle">具体的プロンプト・ノード設定・実装ガイド</p>
+            </header>
+
+            <div class="workflow-toc">
+                <h3><i class="fas fa-list"></i> ワークフロー概要</h3>
+                <div class="workflow-overview">
+                    <div class="overview-step">
+                        <span class="step-num">1</span>
+                        <span>Start（入力）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">2</span>
+                        <span>Search（競合調査）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">3</span>
+                        <span>Extract（本文抽出）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">4</span>
+                        <span>GPT（要約）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">5</span>
+                        <span>Gemini（ペルソナ）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">6</span>
+                        <span>GPT（アウトライン）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">7</span>
+                        <span>Loop（反復精査）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">8</span>
+                        <span>GPT（本文生成）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">9</span>
+                        <span>GPT+RAG（ファクトチェック）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">10</span>
+                        <span>Claude（リライト）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">11</span>
+                        <span>End（出力）</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workflow-nodes">
+                <!-- ① Start ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header start">
+                        <div class="node-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>① Start ノード（ユーザー入力）</h2>
+                            <p>ワークフローの開始点、ユーザーからの入力を受け取る</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-cog"></i> 入力変数設定</h3>
+                            <div class="config-grid">
+                                <div class="config-item">
+                                    <div class="config-label">keyword</div>
+                                    <div class="config-type">string</div>
+                                    <div class="config-desc">例：「派遣法 教育訓練 義務化」</div>
+                                </div>
+                                <div class="config-item">
+                                    <div class="config-label">persona</div>
+                                    <div class="config-type">string (optional)</div>
+                                    <div class="config-desc">例：「派遣会社 教育担当」</div>
+                                </div>
+                                <div class="config-item">
+                                    <div class="config-label">article_type</div>
+                                    <div class="config-type">enum</div>
+                                    <div class="config-desc">例：「解説」/「比較」/「事例」</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ② Search ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header search">
+                        <div class="node-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>② Search ノード（競合記事検索）</h2>
+                            <p>Bright Data検索プラグインで上位記事を取得</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-plug"></i> プラグイン設定</h3>
+                            <div class="plugin-info">
+                                <div class="plugin-name">Bright Data「Search Engine」</div>
+                                <div class="plugin-settings">
+                                    <div class="setting-row">
+                                        <span class="setting-label">検索クエリ</span>
+                                        <code>{{keyword}}</code>
+                                    </div>
+                                    <div class="setting-row">
+                                        <span class="setting-label">検索件数</span>
+                                        <code>5件</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">search_results</span>
+                                <span class="var-desc">タイトル/URL/スニペット一覧</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ③ Extract ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header extract">
+                        <div class="node-icon">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>③ Extract ノード（本文抽出）</h2>
+                            <p>競合記事の詳細コンテンツを取得</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-plug"></i> プラグイン設定</h3>
+                            <div class="plugin-info">
+                                <div class="plugin-name">Scrape as Markdown</div>
+                                <div class="plugin-settings">
+                                    <div class="setting-row">
+                                        <span class="setting-label">入力URL</span>
+                                        <code>{{search_results.urls}}</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">competitor_articles</span>
+                                <span class="var-desc">各記事の本文（Markdown形式）</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ④ GPT ノード（競合要約） -->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>④ GPT ノード（競合要約＋頻出要素抽出）</h2>
+                            <p>競合記事を分析し、重要な要素を抽出</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはSEOアナリストです。
+以下の記事群を分析し、次をJSONで出力してください：
+- 頻出見出しリスト
+- 頻出キーワード（上位10）
+- FAQリスト（よく扱われている質問）
+- 参考URLリスト
+
+入力: {{competitor_articles}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var">
+                                    <span class="var-name">topics[]</span>
+                                    <span class="var-desc">主要トピック一覧</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">headings[]</span>
+                                    <span class="var-desc">頻出見出し</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">keywords[]</span>
+                                    <span class="var-desc">重要キーワード</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">faqs[]</span>
+                                    <span class="var-desc">よくある質問</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">sources[]</span>
+                                    <span class="var-desc">参考URL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑤ Gemini ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header gemini">
+                        <div class="node-icon">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑤ Gemini ノード（検索意図・ペルソナ解析）</h2>
+                            <p>ユーザーの検索意図と想定読者を分析</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">Gemini Pro</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">以下の情報から、検索者の「真の目的」と「想定ペルソナ像」を抽出してください。
+また推奨トーン（敬体/カジュアル/専門的）を出してください。
+
+入力: {{topics}}, {{keywords}}, {{persona}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var">
+                                    <span class="var-name">search_intent</span>
+                                    <span class="var-desc">検索意図の分析結果</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">persona_profile</span>
+                                    <span class="var-desc">想定読者のプロファイル</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">tone_guideline</span>
+                                    <span class="var-desc">推奨文体・トーン</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑥ GPT ノード（アウトライン生成） -->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑥ GPT ノード（アウトライン生成＋知識ギャップ出力）</h2>
+                            <p>記事構成を作成し、不足情報を特定</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはプロのSEOライターです。
+以下の要素をすべて含み、網羅的な記事アウトラインを提案してください。
+- 検索意図: {{search_intent}}
+- ペルソナ: {{persona_profile}}
+- 競合頻出見出し: {{headings}}
+- FAQ: {{faqs}}
+
+出力は必ずJSON形式で：
+{
+  "outline": [ "H1...", "H2...", "H3..." ],
+  "knowledge_gaps": [ "不足しているトピック1", "不足しているトピック2" ]
+}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var">
+                                    <span class="var-name">outline[]</span>
+                                    <span class="var-desc">記事アウトライン</span>
+                                </div>
+                                <div class="output-var important">
+                                    <span class="var-name">knowledge_gaps[]</span>
+                                    <span class="var-desc">不足している論点（ループ判定用）</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑦ Loop ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header loop">
+                        <div class="node-icon">
+                            <i class="fas fa-sync"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑦ Loop ノード（反復精査）</h2>
+                            <p>知識ギャップが解消されるまで追加リサーチ</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-cog"></i> ループ条件</h3>
+                            <div class="loop-conditions">
+                                <div class="condition-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <code>knowledge_gaps.length > 0</code>
+                                </div>
+                                <div class="condition-operator">かつ</div>
+                                <div class="condition-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <code>loop_count < 3</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loop-process">
+                            <h3><i class="fas fa-cogs"></i> ループ内処理</h3>
+                            <div class="process-steps">
+                                <div class="process-step">
+                                    <span class="step-number">1</span>
+                                    <span>再度 Search → Extract → GPT要約</span>
+                                </div>
+                                <div class="process-step">
+                                    <span class="step-number">2</span>
+                                    <span>不足トピックを補強し、アウトラインを更新</span>
+                                </div>
+                                <div class="process-step">
+                                    <span class="step-number">3</span>
+                                    <span>knowledge_gaps を再評価</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑧ GPT/Gemini ノード（本文生成） -->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑧ GPT/Gemini ノード（本文生成）</h2>
+                            <p>確定したアウトラインから記事本文を作成</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4 または Gemini</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">以下のアウトラインに従って記事本文を作成してください。
+- トーン: {{tone_guideline}}
+- ペルソナ: {{persona_profile}}
+- 出力はMarkdown形式（H1/H2/H3を見出し、箇条書きも使用）
+
+アウトライン: {{outline}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">draft_article</span>
+                                <span class="var-desc">記事ドラフト（Markdown形式）</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑨ GPT＋Knowledge ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header rag">
+                        <div class="node-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑨ GPT＋Knowledge ノード（ファクトチェック＋用語統一）</h2>
+                            <p>知識ベースを参照して事実確認と用語統一</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                            <h3><i class="fas fa-database"></i> Knowledge接続</h3>
+                            <div class="knowledge-info">派遣法PDF、社内用語集</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">以下のドラフト本文をチェックし、事実誤認や不正確な記述を修正してください。
+またKnowledgeベースを参照し、用語表記を統一してください。
+- 出典がある場合は引用URLも追加してください。
+
+入力: {{draft_article}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">checked_article</span>
+                                <span class="var-desc">ファクトチェック・用語統一済み記事</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑩ Claude ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header claude">
+                        <div class="node-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑩ Claude ノード（リライト）</h2>
+                            <p>読みやすさとトーンの最終調整</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">Claude 2</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">以下の文章を読みやすくブラッシュアップしてください。
+- 冗長表現を削除
+- 文末を敬体で統一
+- 読者が理解しやすいように箇条書きを追加
+- FAQは会話調に調整
+
+入力: {{checked_article}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">final_article</span>
+                                <span class="var-desc">最終調整済み記事</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑪ End ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header end">
+                        <div class="node-icon">
+                            <i class="fas fa-flag-checkered"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑪ End ノード（成果物出力）</h2>
+                            <p>最終的な成果物をまとめて出力</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-output">
+                            <h3><i class="fas fa-file-export"></i> 出力</h3>
+                            <div class="output-final">
+                                <div class="final-output-item">
+                                    <i class="fas fa-file-alt"></i>
+                                    <div>
+                                        <strong>Markdown本文</strong>
+                                        <code>{{final_article}}</code>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-tags"></i>
+                                    <div>
+                                        <strong>メタ情報</strong>
+                                        <span>title/desc/slug案</span>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-link"></i>
+                                    <div>
+                                        <strong>内部リンク候補</strong>
+                                        <code>{{sources}}</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="implementation-tips">
+                <h2><i class="fas fa-lightbulb"></i> 実装のポイント</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>エラーハンドリング</h3>
+                        <p>各ノードでタイムアウトやAPI制限に対する適切なエラーハンドリングを実装する</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>パフォーマンス最適化</h3>
+                        <p>並列実行可能な部分は並列化し、処理時間の短縮を図る</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>セキュリティ</h3>
+                        <p>APIキーは環境変数で管理し、ログに機密情報が残らないよう注意</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-cog"></i>
+                        <h3>設定の柔軟性</h3>
+                        <p>プロンプトやパラメータは外部設定ファイルで管理し、調整しやすくする</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
+            <p>
+                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        function copyPrompt(button) {
+            const codeBlock = button.previousElementSibling.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> コピー完了';
+                button.style.background = '#28a745';
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

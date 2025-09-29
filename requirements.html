@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>要件定義書 - Dify SEO記事自動執筆システム</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/requirements.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">
+                <i class="fas fa-robot"></i>
+                Dify SEO記事自動執筆システム
+            </h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="requirements.html" class="nav-link active">要件定義</a></li>
+                <li><a href="implementation.html" class="nav-link">実装想定</a></li>
+                <li><a href="workflow.html" class="nav-link">ワークフロー</a></li>
+                <li><a href="poc.html" class="nav-link">PoC報告</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="requirements-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-clipboard-list"></i> 要件定義書</h1>
+                <p class="page-subtitle">AI×人のSEO記事量産ワークフロー／Dify実装</p>
+            </header>
+
+            <div class="requirements-toc">
+                <h3><i class="fas fa-list"></i> 目次</h3>
+                <ul>
+                    <li><a href="#background">1. 背景・目的</a></li>
+                    <li><a href="#deliverables">2. 成果物（アウトカム）</a></li>
+                    <li><a href="#kpi">3. 目標KPI／KGI</a></li>
+                    <li><a href="#roles">4. 体制・役割（RACI）</a></li>
+                    <li><a href="#system">5. システム構成</a></li>
+                    <li><a href="#functional">6. 機能要件</a></li>
+                    <li><a href="#non-functional">7. 非機能要件</a></li>
+                    <li><a href="#interfaces">8. 入出力インターフェース</a></li>
+                    <li><a href="#templates">9. テンプレ／チェックリスト</a></li>
+                    <li><a href="#constraints">10. 制約・前提・リスク</a></li>
+                    <li><a href="#costs">11. プラン／コスト指針</a></li>
+                    <li><a href="#schedule">12. スケジュール</a></li>
+                    <li><a href="#acceptance">13. 受入基準</a></li>
+                </ul>
+            </div>
+
+            <section id="background" class="req-section">
+                <h2><span class="section-number">1.</span> 背景・目的</h2>
+                <div class="content-card">
+                    <div class="purpose">
+                        <h3><i class="fas fa-bullseye"></i> 目的</h3>
+                        <p>検索意図を満たし再検索を減らす「人の役に立つ高品質コンテンツ」を、AI支援で継続的・スケーラブルに量産できる仕組みを構築する。</p>
+                    </div>
+                    <div class="scope">
+                        <h3><i class="fas fa-crosshairs"></i> 適用範囲</h3>
+                        <p>クロスリンクの自社メディア／特設LP／資料DL用記事群<br>
+                        （初期は「派遣法・教育訓練・派遣会社向け業界記事」中心。将来はジャンル横展開）</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="deliverables" class="req-section">
+                <h2><span class="section-number">2.</span> 成果物（アウトカム）</h2>
+                <div class="content-card">
+                    <div class="deliverable-grid">
+                        <div class="deliverable-item">
+                            <i class="fas fa-cogs"></i>
+                            <h3>AIワークフロー（Dify）</h3>
+                            <p>①競合調査→②検索意図/ペルソナ→③見出し設計（※①〜③反復）→④本文生成→⑤ファクトチェック/用語統一→⑥リライト→〔⑦CMS入稿＝人〕</p>
+                        </div>
+                        <div class="deliverable-item">
+                            <i class="fas fa-templates"></i>
+                            <h3>運用テンプレ</h3>
+                            <p>プロンプト/チェックリスト/受入基準/ログビュー</p>
+                        </div>
+                        <div class="deliverable-item">
+                            <i class="fas fa-database"></i>
+                            <h3>ナレッジ</h3>
+                            <p>法規・社内資料・用語集のRAG基盤（拡張可）</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="kpi" class="req-section">
+                <h2><span class="section-number">3.</span> 目標KPI／KGI</h2>
+                <div class="content-card">
+                    <div class="kpi-grid">
+                        <div class="kpi-item quantity">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>量</h3>
+                            <p>月8本以上継続<br>（短期ゴール：累計100本）</p>
+                        </div>
+                        <div class="kpi-item quality">
+                            <i class="fas fa-star"></i>
+                            <h3>質</h3>
+                            <p>離脱率・再検索兆候の低減<br>完読率↑<br>該当キーワード群の平均掲載順位↑</p>
+                        </div>
+                        <div class="kpi-item conversion">
+                            <i class="fas fa-exchange-alt"></i>
+                            <h3>CV</h3>
+                            <p>資料DL率・問い合わせ率の改善</p>
+                        </div>
+                        <div class="kpi-item efficiency">
+                            <i class="fas fa-clock"></i>
+                            <h3>運用効率</h3>
+                            <p>1本あたり制作工数の削減<br>（人手時間△）</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="roles" class="req-section">
+                <h2><span class="section-number">4.</span> 体制・役割（RACI）</h2>
+                <div class="content-card">
+                    <div class="raci-note">
+                        <p><strong>※ R=実行、A=最終責任、C=相談、I=情報共有</strong></p>
+                    </div>
+                    <div class="table-container">
+                        <table class="raci-table">
+                            <thead>
+                                <tr>
+                                    <th>タスク</th>
+                                    <th>企画</th>
+                                    <th>AI(ワークフロー)</th>
+                                    <th>編集(人)</th>
+                                    <th>承認</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>キーワード/テーマ選定</td>
+                                    <td><span class="role-r">R</span></td>
+                                    <td><span class="role-ac">A/C</span></td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>①競合調査・要約</td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-ra">R/A</span></td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>②検索意図/ペルソナ</td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-ra">R/A</span></td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>③見出し設計（反復）</td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-ra">R/A</span></td>
+                                    <td><span class="role-r">R</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>④本文ドラフト</td>
+                                    <td><span class="role-i">I</span></td>
+                                    <td><span class="role-ra">R/A</span></td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>⑤ファクトチェック</td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-ra">R/A（RAG参照）</span></td>
+                                    <td><span class="role-r">R</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>⑥リライト/トーン調整</td>
+                                    <td><span class="role-c">C</span></td>
+                                    <td><span class="role-r">R（Claude）</span></td>
+                                    <td><span class="role-a">A</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                                <tr>
+                                    <td>⑦CMS入稿/内部リンク</td>
+                                    <td><span class="role-i">I</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                    <td><span class="role-ra">R/A</span></td>
+                                    <td><span class="role-i">I</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="system" class="req-section">
+                <h2><span class="section-number">5.</span> システム構成（論理）</h2>
+                <div class="content-card">
+                    <div class="system-grid">
+                        <div class="system-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <h3>オーケストレーション</h3>
+                            <p>Dify（Workflow/Loop/Agent/Knowledge/Roles）</p>
+                        </div>
+                        <div class="system-item">
+                            <i class="fas fa-brain"></i>
+                            <h3>LLM</h3>
+                            <ul>
+                                <li><strong>GPT-4(系)</strong>＝リサーチ要約／構成／ドラフト／ファクトチェック</li>
+                                <li><strong>Gemini</strong>＝検索意図・ペルソナ最適化（文体可変）</li>
+                                <li><strong>Claude</strong>＝可読性高い自然文への最終リライト（長文強み）</li>
+                            </ul>
+                        </div>
+                        <div class="system-item">
+                            <i class="fas fa-tools"></i>
+                            <h3>外部ツール</h3>
+                            <p>検索/SERP取得（例：Bright Dataや検索プラグイン）、Webページ抽出、CMS（WordPress）は当面手動入稿</p>
+                        </div>
+                        <div class="system-item">
+                            <i class="fas fa-database"></i>
+                            <h3>RAG</h3>
+                            <p>法規PDF・自社資料・用語集（JSON/CSV）をナレッジ化</p>
+                        </div>
+                        <div class="system-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>監視</h3>
+                            <p>実行ログ、プロンプト/モデル別コスト、注釈フィードバック</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="functional" class="req-section">
+                <h2><span class="section-number">6.</span> 機能要件（ワークフロー詳細）</h2>
+                <div class="content-card">
+                    <div class="functional-sections">
+                        <div class="func-section">
+                            <h3><i class="fas fa-sign-in-alt"></i> 6.1 入力</h3>
+                            <div class="input-requirements">
+                                <div class="required-inputs">
+                                    <h4>必須</h4>
+                                    <ul>
+                                        <li>ターゲットKW</li>
+                                        <li>関連KW候補（任意）</li>
+                                        <li>対象読者（ロール/想定業務）</li>
+                                        <li>狙い（DL/CV/トラフィックなど）</li>
+                                        <li>記事タイプ（解説/比較/ガイド）</li>
+                                    </ul>
+                                </div>
+                                <div class="optional-inputs">
+                                    <h4>任意</h4>
+                                    <ul>
+                                        <li>競合URL固定</li>
+                                        <li>禁止事項/NGワード</li>
+                                        <li>参照資料（PDF/URL）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="func-section">
+                            <h3><i class="fas fa-cogs"></i> 6.2 プロセス</h3>
+                            <div class="process-flow">
+                                <div class="process-step">
+                                    <div class="step-header">
+                                        <i class="fas fa-search"></i>
+                                        <h4>競合調査（AI）</h4>
+                                    </div>
+                                    <ul>
+                                        <li>SERP上位3〜5件のURL収集→本文抽出→要点/頻出見出し/主要KW/FAQ抽出</li>
+                                        <li><strong>出力：</strong>topics[] headings[] keywords[] faqs[] sources[]</li>
+                                    </ul>
+                                </div>
+
+                                <div class="process-step">
+                                    <div class="step-header">
+                                        <i class="fas fa-users"></i>
+                                        <h4>検索意図・ペルソナ（AI=Gemini）</h4>
+                                    </div>
+                                    <ul>
+                                        <li>上記要約＋入力KWから検索意図クラスタと読者像を推定</li>
+                                        <li><strong>出力：</strong>search_intent persona tone_guideline</li>
+                                    </ul>
+                                </div>
+
+                                <div class="process-step highlight">
+                                    <div class="step-header">
+                                        <i class="fas fa-sync"></i>
+                                        <h4>見出し案（AI=GPT）＋反復ループ</h4>
+                                    </div>
+                                    <ul>
+                                        <li>H1/H2/H3提案＋<strong>不足トピック（knowledge_gaps[]）</strong>を同時出力</li>
+                                        <li><strong>Loop条件：</strong>knowledge_gaps.length>0 かつ max_iter<=N</li>
+                                        <li>各反復で追加リサーチ→見出し更新→ギャップ解消</li>
+                                    </ul>
+                                </div>
+
+                                <div class="process-step">
+                                    <div class="step-header">
+                                        <i class="fas fa-pen"></i>
+                                        <h4>本文ドラフト（AI=GPT/Gemini）</h4>
+                                    </div>
+                                    <ul>
+                                        <li>見出しごとに段落生成（Markdown）／内部アンカー提案</li>
+                                    </ul>
+                                </div>
+
+                                <div class="process-step">
+                                    <div class="step-header">
+                                        <i class="fas fa-check-circle"></i>
+                                        <h4>ファクトチェック/用語統一（AI=GPT＋RAG）</h4>
+                                    </div>
+                                    <ul>
+                                        <li>数値・法規・固有名詞検証／用語表記揺れ統一／参考リンク挿入</li>
+                                    </ul>
+                                </div>
+
+                                <div class="process-step">
+                                    <div class="step-header">
+                                        <i class="fas fa-edit"></i>
+                                        <h4>最終リライト（AI=Claude）</h4>
+                                    </div>
+                                    <ul>
+                                        <li>可読性・自然さ・冗長削減・小見出し/箇条書き整形・CTA文面提案</li>
+                                    </ul>
+                                </div>
+
+                                <div class="process-step">
+                                    <div class="step-header">
+                                        <i class="fas fa-file-export"></i>
+                                        <h4>出力整形（AI）</h4>
+                                    </div>
+                                    <ul>
+                                        <li>WordPress貼付用Markdown＋メタ要素下書き（title/desc/OG）＋画像alt案＋内部リンク候補</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="func-section">
+                            <h3><i class="fas fa-sign-out-alt"></i> 6.3 出力</h3>
+                            <div class="output-list">
+                                <ul>
+                                    <li><i class="fas fa-file-alt"></i> 記事本文（Markdown）</li>
+                                    <li><i class="fas fa-tags"></i> メタ情報（Title, Meta Description, URL slug案, OG）</li>
+                                    <li><i class="fas fa-link"></i> 内部リンク提案（既存記事スラッグ/アンカー）</li>
+                                    <li><i class="fas fa-bookmark"></i> 参考文献リスト（取得URLと要約）</li>
+                                    <li><i class="fas fa-tasks"></i> CMSチェックリスト（入稿時の最終確認項目）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="non-functional" class="req-section">
+                <h2><span class="section-number">7.</span> 非機能要件</h2>
+                <div class="content-card">
+                    <div class="non-func-grid">
+                        <div class="non-func-item">
+                            <i class="fas fa-medal"></i>
+                            <h3>品質</h3>
+                            <p>網羅性（上位記事の主要見出し・FAQを包含）、正確性（RAG根拠参照）、可読性（Flesch相当の読みやすさ基準／段落長制御）</p>
+                        </div>
+                        <div class="non-func-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <h3>性能</h3>
+                            <p>1本あたりフロー完了 10〜20分目安（モデル/回線に依存）</p>
+                        </div>
+                        <div class="non-func-item">
+                            <i class="fas fa-cog"></i>
+                            <h3>運用</h3>
+                            <p>プロンプト/テンプレはGit/Docsで版管理。失敗時の再実行と差分把握</p>
+                        </div>
+                        <div class="non-func-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>セキュリティ</h3>
+                            <p>APIキーは環境変数保管。社内資料はアクセス権分離。PII/機密のマスキング</p>
+                        </div>
+                        <div class="non-func-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <h3>監査/観測</h3>
+                            <p>実行ログ、使用モデル別コスト、フィードバック（人の◯×評価）→継続改善</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interfaces" class="req-section">
+                <h2><span class="section-number">8.</span> 入出力インターフェース</h2>
+                <div class="content-card">
+                    <div class="interface-grid">
+                        <div class="interface-item">
+                            <i class="fas fa-plug"></i>
+                            <h3>モデル接続</h3>
+                            <p>OpenAI／Google／Anthropic のAPIキー設定</p>
+                        </div>
+                        <div class="interface-item">
+                            <i class="fas fa-search-plus"></i>
+                            <h3>検索・取得</h3>
+                            <p>検索プラグイン（例）＋URL抽出→HTML→Markdown化</p>
+                        </div>
+                        <div class="interface-item">
+                            <i class="fas fa-database"></i>
+                            <h3>RAG</h3>
+                            <p>PDF/Doc/CSV登録（分割・Embedding設定）→上限・更新ポリシー定義</p>
+                        </div>
+                        <div class="interface-item">
+                            <i class="fas fa-wordpress"></i>
+                            <h3>CMS</h3>
+                            <p>当面手動入稿（将来：WP REST API投稿の自動化オプション）</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="templates" class="req-section">
+                <h2><span class="section-number">9.</span> テンプレ／チェックリスト</h2>
+                <div class="content-card">
+                    <div class="checklist">
+                        <h3><i class="fas fa-clipboard-check"></i> 記事受入チェック（抜粋）</h3>
+                        <ul class="checklist-items">
+                            <li><i class="fas fa-check"></i> 競合主要見出し・FAQの網羅</li>
+                            <li><i class="fas fa-check"></i> 検索意図に即した導入・結論</li>
+                            <li><i class="fas fa-check"></i> 事実根拠の提示（出典URL/法規条文等）</li>
+                            <li><i class="fas fa-check"></i> 画像は本文中で説明テキストを付与（alt/キャプション）</li>
+                            <li><i class="fas fa-check"></i> CTAと内部リンク挿入／メタ完備</li>
+                            <li><i class="fas fa-check"></i> 用語統一／表記ゆれなし</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="constraints" class="req-section">
+                <h2><span class="section-number">10.</span> 制約・前提・リスク</h2>
+                <div class="content-card">
+                    <div class="constraints-grid">
+                        <div class="constraint-item risk">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h3>利用規約遵守</h3>
+                            <p>検索プラグイン/取得先の利用規約遵守・スクレイピング可否</p>
+                        </div>
+                        <div class="constraint-item risk">
+                            <i class="fas fa-clock"></i>
+                            <h3>法規記事リスク</h3>
+                            <p>最新改正の反映遅延リスク→監視フロー（アラート）を別途設計</p>
+                        </div>
+                        <div class="constraint-item">
+                            <i class="fas fa-image"></i>
+                            <h3>画像認識/評価</h3>
+                            <p>重要情報はテキストでも必ず記載（SEO上の確実性確保）</p>
+                        </div>
+                        <div class="constraint-item">
+                            <i class="fas fa-sync-alt"></i>
+                            <h3>モデル更新</h3>
+                            <p>挙動変化による品質ブレ→定期ABテストとプロンプト回収</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="costs" class="req-section">
+                <h2><span class="section-number">11.</span> プラン／コスト指針（初期案）</h2>
+                <div class="content-card">
+                    <div class="cost-grid">
+                        <div class="cost-item">
+                            <i class="fas fa-server"></i>
+                            <h3>Dify</h3>
+                            <p>Professional開始（5,000 calls/月・3名）→需要に応じTeamへ</p>
+                        </div>
+                        <div class="cost-item">
+                            <i class="fas fa-brain"></i>
+                            <h3>モデル課金</h3>
+                            <p>GPT/Claude/Geminiは従量。ドラフト＝コスパ重視、最終リライト＝高品質モデル</p>
+                        </div>
+                        <div class="cost-item">
+                            <i class="fas fa-search"></i>
+                            <h3>検索取得</h3>
+                            <p>外部プラグイン（必要なら有償）</p>
+                        </div>
+                        <div class="cost-item">
+                            <i class="fas fa-calculator"></i>
+                            <h3>目安</h3>
+                            <p>月8〜12本運用の想定コール数を試行で実測→上限超過時はTeamへ</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="schedule" class="req-section">
+                <h2><span class="section-number">12.</span> スケジュール（MVP→本運用）</h2>
+                <div class="content-card">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">W1–2</div>
+                            <div class="timeline-content">
+                                <h3>MVP</h3>
+                                <p>1キーワードで①〜⑥通し実装、RAG最小</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">W3–4</div>
+                            <div class="timeline-content">
+                                <h3>テンプレ整備</h3>
+                                <p>チェックリスト固め／KPI計測導入</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">M2</div>
+                            <div class="timeline-content">
+                                <h3>本格運用開始</h3>
+                                <p>月8本運用開始、法規・教育テーマ優先、資料DL導線同時整備</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">M3</div>
+                            <div class="timeline-content">
+                                <h3>機能拡張</h3>
+                                <p>自動内部リンク候補、WP API試験、ABテスト</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="acceptance" class="req-section">
+                <h2><span class="section-number">13.</span> 受入基準（Go/No-Go）</h2>
+                <div class="content-card">
+                    <div class="acceptance-criteria">
+                        <div class="criteria-item success">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <h3>ワンクリック動作</h3>
+                            <p>フローが<strong>1クリック（入力→出力）</strong>で再現</p>
+                        </div>
+                        <div class="criteria-item success">
+                            <i class="fas fa-percentage"></i>
+                            <h3>網羅性</h3>
+                            <p>競合主要見出しの80%以上を網羅 or それを上回る論点追加</p>
+                        </div>
+                        <div class="criteria-item success">
+                            <i class="fas fa-check-double"></i>
+                            <h3>精度</h3>
+                            <p>RAG根拠付きファクトチェック通過（誤記ゼロ）</p>
+                        </div>
+                        <div class="criteria-item success">
+                            <i class="fas fa-user-edit"></i>
+                            <h3>工数削減</h3>
+                            <p>編集者レビューで修正工数△30%以上（ベースライン比）</p>
+                        </div>
+                        <div class="criteria-item success">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>品質指標</h3>
+                            <p>記事3本の試験公開で<strong>完読率↑/離脱↓/再検索兆候↓</strong>が確認できる</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
+            <p>
+                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
