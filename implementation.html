@@ -35,14 +35,105 @@
             <div class="implementation-toc">
                 <h3><i class="fas fa-list"></i> 目次</h3>
                 <ul>
-                    <li><a href="#poc-report">1. レポート資料（PoC実走報告書）</a></li>
-                    <li><a href="#system-definition">2. システム定義（Dify設計書）</a></li>
-                    <li><a href="#test-specs">3. テスト仕様書（サンプル）</a></li>
+                    <li><a href="#seo-strategy-prompt">1. SEO記事戦略レポート作成プロンプト（3フェーズ版）</a></li>
+                    <li><a href="#poc-report">2. レポート資料（PoC実走報告書）</a></li>
+                    <li><a href="#system-definition">3. システム定義（Dify設計書）</a></li>
+                    <li><a href="#test-specs">4. テスト仕様書（サンプル）</a></li>
                 </ul>
             </div>
 
+            <section id="seo-strategy-prompt" class="impl-section">
+                <h2><span class="section-number">1.</span> SEO記事戦略レポート作成プロンプト（3フェーズ版）</h2>
+                <div class="content-card">
+                    <div class="prompt-strategy-overview">
+                        <div class="strategy-header">
+                            <h3><i class="fas fa-lightbulb"></i> プロンプト概要</h3>
+                            <p>このプロンプトは「SEO記事戦略レポート」を自動で作り上げるための指示書です。キーワード選定から競合分析、検索意図の特定、ペルソナ定義、記事構成設計まで、SEO記事作成のプロセスをワンストップで実行します。</p>
+                        </div>
+
+                        <div class="phase-breakdown">
+                            <div class="phase-section">
+                                <h4><i class="fas fa-flag"></i> フェーズ1（準備）</h4>
+                                <div class="phase-details">
+                                    <ul>
+                                        <li>メインとなるキーワードを受け取る</li>
+                                        <li>そのキーワードで上位表示されている5サイトをユーザーと合意して分析の起点とする</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="phase-section">
+                                <h4><i class="fas fa-search"></i> フェーズ2（分析）</h4>
+                                <div class="phase-details">
+                                    <ul>
+                                        <li>5サイトを分析して関連キーワードを幅広く抽出</li>
+                                        <li>各関連キーワードごとに検索を行い、5サイトが何位に出てくるかを調査</li>
+                                        <li>その結果をマトリックス表にまとめ、検索意図の中心となるキーワードを再定義</li>
+                                        <li>ペルソナ（想定読者像）と検索意図を言語化した中間レポートを作成</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="phase-section">
+                                <h4><i class="fas fa-pen"></i> フェーズ3（記事設計）</h4>
+                                <div class="phase-details">
+                                    <ul>
+                                        <li>競合記事の強み・弱みを整理し、差別化できる切り口を発見</li>
+                                        <li>追加調査を行い、読者が疑問を解決しやすい記事ストーリーを設計</li>
+                                        <li>タイトル案や見出し構成を作成し、最終的なSEO記事戦略レポートとしてまとめる</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="enhanced-features">
+                            <h4><i class="fas fa-star"></i> SEO強化要素</h4>
+                            <div class="features-grid">
+                                <div class="feature-item">
+                                    <strong>競合順位マトリックス</strong>
+                                    <p>関連キーワード×競合サイトの順位を体系的に分析</p>
+                                </div>
+                                <div class="feature-item">
+                                    <strong>差別化戦略</strong>
+                                    <p>競合の強み・弱みから独自の切り口を発見</p>
+                                </div>
+                                <div class="feature-item">
+                                    <strong>ペルソナ深堀り</strong>
+                                    <p>検索意図の中心を再定義し、具体的な読者像を構築</p>
+                                </div>
+                                <div class="feature-item">
+                                    <strong>記事ストーリー設計</strong>
+                                    <p>読者の疑問解決に特化した論理的な構成</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="prompt-implementation">
+                            <h4><i class="fas fa-cogs"></i> Dify実装との対応</h4>
+                            <div class="implementation-mapping">
+                                <div class="mapping-item">
+                                    <span class="phase-label">フェーズ1</span>
+                                    <span class="arrow">→</span>
+                                    <span class="dify-nodes">Start + Search + Extract ノード</span>
+                                </div>
+                                <div class="mapping-item">
+                                    <span class="phase-label">フェーズ2</span>
+                                    <span class="arrow">→</span>
+                                    <span class="dify-nodes">GPT（関連KW抽出） + Search Matrix + Gemini（検索意図分析）</span>
+                                </div>
+                                <div class="mapping-item">
+                                    <span class="phase-label">フェーズ3</span>
+                                    <span class="arrow">→</span>
+                                    <span class="dify-nodes">GPT（競合分析・差別化） + GPT（戦略的アウトライン） + Loop（知識ギャップ解消）</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="poc-report" class="impl-section">
-                <h2><span class="section-number">1.</span> レポート資料（PoC実走報告書）</h2>
+                <h2><span class="section-number">2.</span> レポート資料（PoC実走報告書）</h2>
                 <div class="content-card">
                     <div class="poc-example">
                         <div class="example-header">
@@ -207,7 +298,7 @@
             </section>
 
             <section id="system-definition" class="impl-section">
-                <h2><span class="section-number">2.</span> システム定義（Dify設計書）</h2>
+                <h2><span class="section-number">3.</span> システム定義（Dify設計書）</h2>
                 <div class="content-card">
                     <div class="system-definition">
                         <div class="definition-section">
@@ -335,7 +426,7 @@
             </section>
 
             <section id="test-specs" class="impl-section">
-                <h2><span class="section-number">3.</span> テスト仕様書（サンプル）</h2>
+                <h2><span class="section-number">4.</span> テスト仕様書（サンプル）</h2>
                 <div class="content-card">
                     <div class="test-specifications">
                         <div class="test-category">
