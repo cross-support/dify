@@ -1,0 +1,297 @@
+{
+  "version": "0.1.0",
+  "kind": "app",
+  "app": {
+    "mode": "workflow",
+    "name": "SEO記事自動執筆システム",
+    "description": "競合調査から最終リライトまで、QuestionとAnswerのズレをゼロにする12ステップワークフロー",
+    "icon": "🤖",
+    "icon_background": "#667eea"
+  },
+  "workflow": {
+    "nodes": [
+      {
+        "id": "start",
+        "type": "start",
+        "data": {
+          "title": "Start - キーワード入力",
+          "variables": [
+            {
+              "variable": "keyword",
+              "type": "text-input",
+              "required": true,
+              "label": "ターゲットキーワード",
+              "description": "例：派遣法 教育訓練 義務化"
+            },
+            {
+              "variable": "persona",
+              "type": "text-input",
+              "required": false,
+              "label": "ペルソナ条件",
+              "description": "例：派遣会社 教育担当"
+            },
+            {
+              "variable": "article_type",
+              "type": "select",
+              "required": false,
+              "label": "記事タイプ",
+              "options": ["解説", "比較", "事例", "ガイド"],
+              "default": "解説"
+            }
+          ]
+        },
+        "position": { "x": 100, "y": 100 }
+      },
+      {
+        "id": "search_node",
+        "type": "http-request",
+        "data": {
+          "title": "② Search - 上位10サイト取得",
+          "method": "GET",
+          "url": "{{search_api_endpoint}}",
+          "params": {
+            "query": "{{#start.keyword#}}",
+            "num": 10
+          },
+          "timeout": 30
+        },
+        "position": { "x": 100, "y": 250 }
+      },
+      {
+        "id": "extract_node",
+        "type": "code",
+        "data": {
+          "title": "③ Extract - 本文抽出",
+          "code_language": "python3",
+          "code": "import json\n\ndef main(search_results):\n    # 各URLから本文を抽出（Scrape as Markdownプラグイン想定）\n    articles = []\n    for result in search_results:\n        # ここにスクレイピング処理\n        articles.append({\n            'url': result['url'],\n            'title': result['title'],\n            'content': result['content']\n        })\n    return {\n        'competitor_articles': json.dumps(articles, ensure_ascii=False)\n    }",
+          "variables": [
+            {
+              "variable": "search_results",
+              "value": "{{#search_node.output#}}"
+            }
+          ]
+        },
+        "position": { "x": 100, "y": 400 }
+      },
+      {
+        "id": "gemini_query_analysis",
+        "type": "llm",
+        "data": {
+          "title": "④ Gemini - クエリ分析・ペルソナ深掘り",
+          "model": {
+            "provider": "google",
+            "name": "gemini-pro",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.7
+            }
+          },
+          "prompt_template": "あなたはSEOエキスパートです。\nキーワード「{{#start.keyword#}}」をGoogle検索窓に入れた際のサジェストクエリと、上位10記事を分析し、\n検索者の「Question（疑問・検索意図）」を明確化してください。\n\n【作業手順】\n1. 検索クエリサジェスト分析\n   - Google検索窓に表示されるサジェストキーワードを確認\n   - 関連性の高いクエリの傾向を把握\n\n2. ペルソナ深掘り\n   - このキーワードで検索する人の具体像（職種、課題、目的）\n   - 検索者が真に知りたいこと（Question）\n\n3. Question の明確化\n   - 「何を知りたいのか」を一文で表現\n   - 検索者の疑問を段階的に分解（疑問A → 疑問B → 疑問C）\n\n【重要】\n- QuestionとAnswerのズレがないことが良質記事の条件です\n- 検索者の疑問を正確に捉え、後続のAnswer作成に繋げます\n\n【出力形式】JSON\n{\n  \"query_suggestions\": [\"サジェスト1\", \"サジェスト2\"],\n  \"persona_profile\": \"具体的なペルソナ像\",\n  \"core_question\": \"検索者の中心的な疑問（一文）\",\n  \"question_breakdown\": [\"疑問A\", \"疑問B\", \"疑問C\"],\n  \"tone_guideline\": \"推奨トーン・文体\"\n}\n\n競合記事:\n{{#extract_node.competitor_articles#}}",
+          "context": {
+            "enabled": false
+          }
+        },
+        "position": { "x": 100, "y": 550 }
+      },
+      {
+        "id": "gpt_kyoki_extraction",
+        "type": "llm",
+        "data": {
+          "title": "⑤ GPT - 共起語・関連KW抽出【心臓部】",
+          "model": {
+            "provider": "openai",
+            "name": "gpt-4",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.3
+            }
+          },
+          "prompt_template": "あなたはSEOエキスパートです。\nこの工程は「心臓部」です。Questionに対する的確なAnswerを作成するため、\n競合記事から「共起語」と「関連キーワード」を徹底抽出してください。\n\n【作業手順】\n1. クエリの確認（最優先）\n   - Google検索窓のサジェストクエリ: {{#gemini_query_analysis.query_suggestions#}}\n   - これらのクエリから、検索者のニーズを把握\n\n2. 共起語の抽出\n   - 競合10記事で頻出する単語・フレーズを抽出\n   - AND検索なのかOR検索なのかを判断\n   - 全記事共通の共起語を優先（重要度高）\n\n3. 関連キーワードの抽出\n   - メインキーワード「{{#start.keyword#}}」の類義語・関連語\n   - 見出しパターンの分析\n   - FAQ・よくある疑問の整理\n\n4. Answer準備\n   - 上記の材料を用いて「Question: {{#gemini_query_analysis.core_question#}}」に答えられるか確認\n   - 不足している論点・切り口を指摘\n\n【重要原則】\n✓ QuestionとAnswerのズレをなくす\n✓ 競合が見落としている論点を発見する\n\n【出力形式】JSON\n{\n  \"kyoki_words\": [\"共起語1\", \"共起語2\"],\n  \"related_keywords\": [\"関連KW1\", \"関連KW2\"],\n  \"headings_patterns\": [\"見出しパターン1\"],\n  \"faqs\": [\"FAQ1\", \"FAQ2\"],\n  \"missing_topics\": [\"競合が見落としている論点1\"],\n  \"sources\": [\"URL1\", \"URL2\"]\n}\n\n競合記事:\n{{#extract_node.competitor_articles#}}",
+          "context": {
+            "enabled": false
+          }
+        },
+        "position": { "x": 100, "y": 700 }
+      },
+      {
+        "id": "gpt_differentiation",
+        "type": "llm",
+        "data": {
+          "title": "⑥ GPT - 競合分析・差別化戦略",
+          "model": {
+            "provider": "openai",
+            "name": "gpt-4",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.5
+            }
+          },
+          "prompt_template": "あなたはSEOエキスパートです。\n競合分析から差別化戦略を策定してください。\n\n【最重要】差別化の2大要素\n1. 情報のフレッシュネス（最新性）を最優先で考慮\n2. 競合が見落としている論点・切り口の発見（必須）\n\n【分析材料】\n- 競合記事: {{#extract_node.competitor_articles#}}\n- 検索意図（Question）: {{#gemini_query_analysis.core_question#}}\n- ペルソナ: {{#gemini_query_analysis.persona_profile#}}\n- 共起語: {{#gpt_kyoki_extraction.kyoki_words#}}\n- 見落とし論点: {{#gpt_kyoki_extraction.missing_topics#}}\n\n【分析内容】\n1. 各競合記事の強み・弱みを整理\n2. 【必須】競合が見落としている論点・切り口を発見\n3. 【最優先】情報のフレッシュネス分析\n   - 最新データは引用されているか？\n   - 法改正・制度変更は反映されているか？\n   - 競合記事の更新日時は？\n4. ペルソナにとって最も価値のある差別化要素を特定\n5. 読者の疑問を解決しやすい記事ストーリーの方向性を提案\n\n【出力形式】JSON\n{\n  \"competitor_analysis\": {\n    \"strengths\": [\"競合の強み1\", \"競合の強み2\"],\n    \"weaknesses\": [\"競合の弱み1\", \"競合の弱み2\"]\n  },\n  \"freshness_analysis\": {\n    \"latest_data_found\": \"最新データの有無\",\n    \"update_dates\": [\"競合記事の更新日\"],\n    \"freshness_opportunity\": \"フレッシュネスで勝てるポイント\"\n  },\n  \"differentiation_opportunities\": [\"差別化切り口1\", \"差別化切り口2\"],\n  \"story_direction\": \"記事ストーリーの方向性\"\n}",
+          "context": {
+            "enabled": false
+          }
+        },
+        "position": { "x": 100, "y": 850 }
+      },
+      {
+        "id": "gpt_outline",
+        "type": "llm",
+        "data": {
+          "title": "⑦ GPT - アウトライン生成",
+          "model": {
+            "provider": "openai",
+            "name": "gpt-4",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.5
+            }
+          },
+          "prompt_template": "あなたはSEO戦略レポート作成のエキスパートです。\n差別化戦略を反映した、読者の疑問解決に特化した記事アウトラインを作成してください。\n\n【戦略的要素】\n- 検索意図: {{#gemini_query_analysis.core_question#}}\n- ペルソナ: {{#gemini_query_analysis.persona_profile#}}\n- 差別化切り口: {{#gpt_differentiation.differentiation_opportunities#}}\n- 記事ストーリー方向性: {{#gpt_differentiation.story_direction#}}\n- 競合見出しパターン: {{#gpt_kyoki_extraction.headings_patterns#}}\n- FAQ: {{#gpt_kyoki_extraction.faqs#}}\n\n【アウトライン作成要件】\n1. 競合にはない独自の切り口を盛り込む\n2. ペルソナの疑問を段階的に解決する構成にする\n3. 検索意図を満たしつつ、差別化要素を強調する\n4. タイトル案も複数提案する\n\n【出力形式】JSON\n{\n  \"title_options\": [\"タイトル案1\", \"タイトル案2\", \"タイトル案3\"],\n  \"outline\": [\n    {\"level\": \"H1\", \"text\": \"見出し\"},\n    {\"level\": \"H2\", \"text\": \"見出し\"},\n    {\"level\": \"H3\", \"text\": \"見出し\"}\n  ],\n  \"knowledge_gaps\": [\"不足情報1\", \"不足情報2\"],\n  \"unique_value_props\": [\"独自価値1\", \"独自価値2\"]\n}",
+          "context": {
+            "enabled": false
+          }
+        },
+        "position": { "x": 100, "y": 1000 }
+      },
+      {
+        "id": "loop_primary_info",
+        "type": "iteration",
+        "data": {
+          "title": "⑧ Loop - 一次情報追加・ギャップ解消",
+          "is_parallel": false,
+          "iteration_count": 3,
+          "condition": "{{#gpt_outline.knowledge_gaps#}}.length > 0",
+          "inputs": {
+            "knowledge_gaps": "{{#gpt_outline.knowledge_gaps#}}",
+            "outline": "{{#gpt_outline.outline#}}"
+          }
+        },
+        "position": { "x": 100, "y": 1150 }
+      },
+      {
+        "id": "loop_search_primary",
+        "type": "llm",
+        "parent": "loop_primary_info",
+        "data": {
+          "title": "Loop内 - 一次情報収集",
+          "model": {
+            "provider": "openai",
+            "name": "gpt-4",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.3
+            }
+          },
+          "prompt_template": "【一次情報収集プロンプト】\n\n[入力されたキーワード]に関する一次情報を以下の条件で収集してください。\n\n### 収集する情報の種類：\n1. 公的機関の統計データ・調査結果\n2. 学術論文・研究報告書\n3. 業界団体の公式発表・レポート\n4. 政府機関の政策・ガイドライン\n5. 大手企業の公式プレスリリース・決算報告\n6. 専門家・有識者の公式見解（インタビュー記事など）\n\n### 情報収集の条件：\n- 過去2年以内の最新情報を優先\n- 日本語情報を中心に、必要に応じて英語情報も含める\n- 出典元のURLと発表日を必ず明記\n- 情報の信頼性を3段階で評価（高・中・低）\n\n### 不足している情報：\n{{#loop_primary_info.knowledge_gaps#}}\n\n### 出力形式：\n各情報について以下の形式でまとめてください：\n\n**情報タイトル**\n- 情報源：[組織名/著者名]\n- 発表日：[YYYY年MM月DD日]\n- URL：[リンク]\n- 信頼性：[高/中/低]\n- 要約：[100文字程度で要点をまとめる]\n- SEO活用ポイント：[この情報をどのように記事に活用できるか]",
+          "context": {
+            "enabled": false
+          }
+        },
+        "position": { "x": 200, "y": 1200 }
+      },
+      {
+        "id": "gpt_draft",
+        "type": "llm",
+        "data": {
+          "title": "⑨ GPT - 本文生成・10重チェック指示",
+          "model": {
+            "provider": "openai",
+            "name": "gpt-4",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.7,
+              "max_tokens": 12000
+            }
+          },
+          "prompt_template": "あなたはSEOエキスパートです。\n以下の条件で、QuestionとAnswerのズレがない高品質なSEO記事本文を作成してください。\n\n【最重要原則】\n✓ QuestionとAnswerのズレをゼロにする\n✓ 情報をスキップしない（10重チェック指示）\n\n【記事戦略】\n- Question（検索意図）: {{#gemini_query_analysis.core_question#}}\n- ペルソナ: {{#gemini_query_analysis.persona_profile#}}\n- トーン: {{#gemini_query_analysis.tone_guideline#}}\n- 共起語: {{#gpt_kyoki_extraction.kyoki_words#}}\n- 差別化切り口: {{#gpt_differentiation.differentiation_opportunities#}}\n- 一次情報: {{#loop_primary_info.output#}}\n\n【本文作成要件】\n1. 【最優先】QuestionとAnswerのズレをなくす\n   - 検索者の疑問に対して、的確に回答する\n   - 不要な情報を入れない、必要な情報を漏らさない\n\n2. 競合記事の文字数を参考にボリューム調整\n   - 通常3,000〜10,000文字の範囲\n   - 内容が薄い記事を長く書かない\n   - 簡潔に解決できることは簡潔に\n\n3. 一次情報（最新データ）を必ず組み込む\n   - 国・公的機関・銀行等の信頼できるデータ\n   - 引用元URLを明記\n\n4. 【重要】10重チェック指示\n   - 出力前に、提供した知識データを10回チェックする\n   - スキップ厳禁：AIが勝手に省略しないよう徹底\n   - 時間がかかっても確実性を優先\n\n5. 出力はMarkdown形式（H1/H2/H3見出し、箇条書き使用）\n\nアウトライン:\n{{#gpt_outline.outline#}}",
+          "context": {
+            "enabled": true,
+            "variable_selector": ["knowledge_base_id"]
+          }
+        },
+        "position": { "x": 100, "y": 1300 }
+      },
+      {
+        "id": "gpt_factcheck",
+        "type": "llm",
+        "data": {
+          "title": "⑩ GPT o3/o4 - ファクトチェック",
+          "model": {
+            "provider": "openai",
+            "name": "o3-mini",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.1
+            }
+          },
+          "prompt_template": "【ファクトチェックプロンプト（GPT o3/o4用）】\n\n【目的】\nこの記事の全文をファクトチェックしてください。\nあらゆる手段を尽くして、以下の手順に従って進めてください。\n\n【手順】\n1. 記事を精読し、含まれる主張・数値・引用などの「事実」を一つずつ抽出してください。\n2. 抽出した事実ごとに調査を行い、「真実」「虚偽」「不明瞭」のいずれかを判定してください。\n3. 各事実について、信頼性の高い独立した情報源を最低3件探し、判定の根拠として示してください。\n   ※学術論文、政府・公的機関、一次資料、主要報道などを優先\n\n【出力形式】\n以下の3セクションに分けて一覧化してください。\n\n■ 真実\n・事実A｜簡潔な根拠説明｜参考: 媒体名, 媒体名, 媒体名\n・事実B｜...\n\n■ 虚偽\n・事実C｜簡潔な根拠説明｜参考: 媒体名, 媒体名, 媒体名\n\n■ 不明瞭\n・事実D｜判断に足る公開情報が不足｜参考: 媒体名, 媒体名, 媒体名\n\n【補足ルール】\n・「不明瞭」の判定基準は「公開情報が乏しい」「一次資料間で結論が分かれる」など、どちらとも確定できない場合とします\n・引用元は必ず媒体名にリンクを埋め込むこと（URLは本文に表示しない）\n・判定プロセスで矛盾や疑義が見つかった場合は、メモとして指摘し、調査を継続してください\n・箇条書きには必ず「・」を使用し、Markdownの「-」「*」などの自動変換記号は使わないでください\n\n入力記事:\n{{#gpt_draft.text#}}",
+          "context": {
+            "enabled": true,
+            "variable_selector": ["knowledge_base_id"]
+          }
+        },
+        "position": { "x": 100, "y": 1450 }
+      },
+      {
+        "id": "claude_rewrite",
+        "type": "llm",
+        "data": {
+          "title": "⑪ Claude - 最終リライト",
+          "model": {
+            "provider": "anthropic",
+            "name": "claude-3-5-sonnet-20241022",
+            "mode": "chat",
+            "completion_params": {
+              "temperature": 0.5,
+              "max_tokens": 12000
+            }
+          },
+          "prompt_template": "以下の記事を読みやすくブラッシュアップしてください。\n\n【リライト要件】\n- 冗長表現を削除\n- 文末を敬体で統一\n- 読者が理解しやすいように箇条書きを追加\n- FAQは会話調に調整\n- 段落構成を最適化\n- ペルソナ「{{#gemini_query_analysis.persona_profile#}}」に合わせたトーン調整\n\nファクトチェック結果:\n{{#gpt_factcheck.text#}}\n\n記事本文:\n{{#gpt_draft.text#}}",
+          "context": {
+            "enabled": false
+          }
+        },
+        "position": { "x": 100, "y": 1600 }
+      },
+      {
+        "id": "end",
+        "type": "end",
+        "data": {
+          "title": "⑫ End - SEO記事完成",
+          "outputs": [
+            {
+              "variable": "final_article",
+              "value": "{{#claude_rewrite.text#}}"
+            },
+            {
+              "variable": "fact_check_report",
+              "value": "{{#gpt_factcheck.text#}}"
+            },
+            {
+              "variable": "differentiation_strategy",
+              "value": "{{#gpt_differentiation.text#}}"
+            },
+            {
+              "variable": "primary_sources",
+              "value": "{{#loop_primary_info.output#}}"
+            }
+          ]
+        },
+        "position": { "x": 100, "y": 1750 }
+      }
+    ],
+    "edges": [
+      { "source": "start", "target": "search_node" },
+      { "source": "search_node", "target": "extract_node" },
+      { "source": "extract_node", "target": "gemini_query_analysis" },
+      { "source": "gemini_query_analysis", "target": "gpt_kyoki_extraction" },
+      { "source": "gpt_kyoki_extraction", "target": "gpt_differentiation" },
+      { "source": "gpt_differentiation", "target": "gpt_outline" },
+      { "source": "gpt_outline", "target": "loop_primary_info" },
+      { "source": "loop_primary_info", "target": "gpt_draft" },
+      { "source": "gpt_draft", "target": "gpt_factcheck" },
+      { "source": "gpt_factcheck", "target": "claude_rewrite" },
+      { "source": "claude_rewrite", "target": "end" }
+    ]
+  }
+}
