@@ -20,6 +20,7 @@
                 <li><a href="requirements.html" class="nav-link">要件定義</a></li>
                 <li><a href="implementation.html" class="nav-link active">実装想定</a></li>
                 <li><a href="workflow.html" class="nav-link">ワークフロー</a></li>
+                <li><a href="prompts.html" class="nav-link">プロンプト集</a></li>
                 <li><a href="poc.html" class="nav-link">PoC報告</a></li>
                 <li><a href="setup.html" class="nav-link">設定手順</a></li>
             </ul>
@@ -324,66 +325,78 @@
                         </div>
 
                         <div class="definition-section">
-                            <h3><i class="fas fa-project-diagram"></i> ワークフロー構成</h3>
+                            <h3><i class="fas fa-project-diagram"></i> ワークフロー構成（更新版）</h3>
                             <div class="workflow-nodes">
                                 <div class="node-flow">
+                                    <div class="workflow-node" style="background: #667eea;">
+                                        <i class="fas fa-user"></i>
+                                        <span>⓪【人間】キーワード選定</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
                                     <div class="workflow-node start">
                                         <i class="fas fa-play"></i>
-                                        <span>Startノード（入力）</span>
+                                        <span>①Startノード（入力）</span>
                                     </div>
-                                    <div class="flow-arrow">→</div>
+                                </div>
+                                <div class="node-flow">
                                     <div class="workflow-node">
                                         <i class="fas fa-search"></i>
-                                        <span>Searchノード（Bright Data検索）</span>
+                                        <span>②Searchノード（上位10サイト取得）</span>
                                     </div>
                                     <div class="flow-arrow">→</div>
                                     <div class="workflow-node">
-                                        <i class="fas fa-extract"></i>
-                                        <span>Extractノード（記事本文取得）</span>
+                                        <i class="fas fa-file-export"></i>
+                                        <span>③Extractノード（本文抽出）</span>
                                     </div>
                                 </div>
                                 <div class="node-flow">
-                                    <div class="workflow-node gpt">
-                                        <i class="fab fa-openai"></i>
-                                        <span>GPTノード（競合要約＋頻出キーワード抽出）</span>
-                                    </div>
-                                    <div class="flow-arrow">→</div>
                                     <div class="workflow-node gemini">
                                         <i class="fab fa-google"></i>
-                                        <span>Geminiノード（検索意図＋ペルソナ推定）</span>
+                                        <span>④Geminiノード（クエリ分析・ペルソナ深掘り）Question明確化</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node gpt" style="border: 3px solid #ff6b6b;">
+                                        <i class="fab fa-openai"></i>
+                                        <span>⑤GPTノード（共起語・関連KW抽出）【心臓部】Answer準備</span>
                                     </div>
                                 </div>
                                 <div class="node-flow">
                                     <div class="workflow-node gpt">
                                         <i class="fab fa-openai"></i>
-                                        <span>GPTノード（アウトライン生成＋knowledge_gaps出力）</span>
+                                        <span>⑥GPTノード（競合分析・差別化）フレッシュネス最優先</span>
                                     </div>
                                     <div class="flow-arrow">→</div>
+                                    <div class="workflow-node gpt">
+                                        <i class="fab fa-openai"></i>
+                                        <span>⑦GPTノード（アウトライン生成＋knowledge_gaps出力）</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
                                     <div class="workflow-node loop">
                                         <i class="fas fa-sync"></i>
-                                        <span>Loopノード（knowledge_gaps≠null → 再検索→アウトライン更新）</span>
+                                        <span>⑧Loopノード（一次情報追加・ギャップ解消）国・公的機関データ優先</span>
                                     </div>
-                                </div>
-                                <div class="node-flow">
+                                    <div class="flow-arrow">→</div>
                                     <div class="workflow-node gpt">
                                         <i class="fab fa-openai"></i>
-                                        <span>GPTノード（本文生成／見出しごと）</span>
-                                    </div>
-                                    <div class="flow-arrow">→</div>
-                                    <div class="workflow-node rag">
-                                        <i class="fas fa-database"></i>
-                                        <span>GPT＋RAGノード（法規PDF参照してファクトチェック・用語統一）</span>
+                                        <span>⑨GPTノード（本文生成・10重チェック指示）3,000〜10,000文字</span>
                                     </div>
                                 </div>
                                 <div class="node-flow">
-                                    <div class="workflow-node claude">
-                                        <i class="fas fa-robot"></i>
-                                        <span>Claudeノード（リライト・トーン調整）</span>
+                                    <div class="workflow-node" style="background: #667eea;">
+                                        <i class="fas fa-check-double"></i>
+                                        <span>⑩GPT o3/o4ノード（ファクトチェック）真実/虚偽/不明瞭判定</span>
                                     </div>
                                     <div class="flow-arrow">→</div>
+                                    <div class="workflow-node claude">
+                                        <i class="fas fa-robot"></i>
+                                        <span>⑪Claudeノード（リライト・トーン調整）</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
                                     <div class="workflow-node end">
                                         <i class="fas fa-flag-checkered"></i>
-                                        <span>Endノード（Markdown＋メタ情報＋内部リンク案出力）</span>
+                                        <span>⑫Endノード（SEO記事完成）QuestionとAnswerのズレがゼロ</span>
                                     </div>
                                 </div>
                             </div>

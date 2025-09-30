@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロンプト集・チェックシート - Dify SEO記事自動執筆システム</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/workflow.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">
+                <i class="fas fa-robot"></i>
+                Dify SEO記事自動執筆システム
+            </h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="requirements.html" class="nav-link">要件定義</a></li>
+                <li><a href="implementation.html" class="nav-link">実装想定</a></li>
+                <li><a href="workflow.html" class="nav-link">ワークフロー</a></li>
+                <li><a href="prompts.html" class="nav-link active">プロンプト集</a></li>
+                <li><a href="poc.html" class="nav-link">PoC報告</a></li>
+                <li><a href="setup.html" class="nav-link">設定手順</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="workflow-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-book"></i> プロンプト集・チェックシート</h1>
+                <p class="page-subtitle">実務で使える基本プロンプト・便利プロンプト・チェック項目集</p>
+            </header>
+
+            <!-- 基本プロンプト（ChatGPT-4o想定） -->
+            <section class="impl-section">
+                <h2><span class="section-number">1.</span> 基本プロンプト（ChatGPT-4o想定）</h2>
+                <div class="content-card">
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-comment-dots"></i> 1. 記事作成開始プロンプト</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">以下情報のサイト、カテゴリ、クエリでSEO記事を作成します。
+-----
+サイト名：〇〇〇
+サイトURL：https://〇〇〇
+カテゴリ名：〇〇〇
+狙うクエリ：〇〇〇　〇〇〇
+-----
+まずは〇〇〇（公式URL）について情報を収集しましょう。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-comment-dots"></i> 2. 検索意図・ペルソナ分析</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">「〇〇〇」と検索する人の検索意図とペルソナを想定してください</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-comment-dots"></i> 3. 共起語抽出</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">では、共起語を想定しましょう。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-comment-dots"></i> 4. 競合調査</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">「〇〇〇」というクエリのSEO競合上位10ページを調べてください。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-comment-dots"></i> 5. 見出し作成</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">では、以下のタイトルとクエリで、見出しを作成していきましょう。
+-----
+タイトル：〇〇〇
+クエリ：〇〇〇
+h2：
+h3：
+-----
+のような形で作成してください。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-comment-dots"></i> 6. 本文生成</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">以下点の指示に従い、見出しの本文を作成してください。
+-----
+・クエリを意識して作成してください。
+・必ずSEO記事タイトル、検索意図に合う内容にしてください。
+・想定した共起語を見出しや本文に自然に盛り込んでください。
+・具体例などを用いて、必ず記事に深みを出してください。
+・必ず記事に深みを出し、深みはあなたが判断して適宜使用してください。
+・優しい自然な表現を使ってください。
+・見出しレベルではなく、記事レベルで内容を重複させないでください。
+-----
+クエリ：〇〇〇
+タイトル：〇〇〇
+-----
+なお、PAAや強調スニペットに表示されるように工夫してください。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 適宜使うと便利なプロンプト -->
+            <section class="impl-section">
+                <h2><span class="section-number">2.</span> 適宜使うと便利なプロンプト</h2>
+                <div class="content-card">
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-search"></i> 競合を網羅的に調べる</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">SEO記事を作成するので「〇〇〇」というクエリのSEO競合を網羅的に調べてください。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-heading"></i> タイトル案の取得</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">検索意図、ペルソナに沿ったタイトル案をください</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-check-circle"></i> 重複チェック</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">完成した見出しで重複する内容はないですか？重複、重複の可能性がある箇所を指摘してください。</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prompt-section">
+                        <h3><i class="fas fa-chart-line"></i> 競合比較</h3>
+                        <div class="prompt-container">
+                            <pre><code class="language-text">見出しはSEO競合よりも優れた内容になっていますか？
+
+記事全体としてSEO競合よりも優れた内容になっていますか？</code></pre>
+                            <button class="copy-btn" onclick="copyPrompt(this)">
+                                <i class="fas fa-copy"></i> コピー
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- チェックシート -->
+            <section class="impl-section">
+                <h2><span class="section-number">3.</span> クエリ選定チェックリスト</h2>
+                <div class="content-card">
+                    <div class="checklist">
+                        <h3><i class="fas fa-clipboard-check"></i> クエリの選定</h3>
+                        <ul class="checklist-items">
+                            <li><i class="fas fa-square"></i> 記事内容を確認したか</li>
+                            <li><i class="fas fa-square"></i> 最適化するクエリで本当に売り上げが上がるのか、他に売り上げに貢献できるクエリはないか</li>
+                            <li><i class="fas fa-square"></i> そのクエリの競合をシークレットで調査し、広告はあるか、上位表示または高CL数を望めるか</li>
+                            <li><i class="fas fa-square"></i> この記事からの売上数を想定したか</li>
+                            <li><i class="fas fa-square"></i> クエリA×クエリB というように掛け合わせることを検討したか</li>
+                            <li><i class="fas fa-square"></i> ※リサーチ中に良いクエリを発見したか</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 改修チェックシート -->
+            <section class="impl-section">
+                <h2><span class="section-number">4.</span> 改修チェックリスト</h2>
+                <div class="content-card">
+                    <div class="checklist">
+                        <h3><i class="fas fa-clipboard-check"></i> 改修時の確認項目</h3>
+                        <ul class="checklist-items">
+                            <li><i class="fas fa-square"></i> 最適化するクエリの上位10記事（自分より上位の記事）、全てに目を通したか</li>
+                            <li><i class="fas fa-square"></i> 関連ワードで気になるものはないか</li>
+                            <li><i class="fas fa-square"></i> PAAで気になるものはないか</li>
+                            <li><i class="fas fa-square"></i> 画像検索、ショッピングなどの並び順を確認したか</li>
+                            <li><i class="fas fa-square"></i> 画像検索を一通りチェックしたか</li>
+                            <li><i class="fas fa-square"></i> YouTubeやSNSで同クエリで検索し、動画内容、人々の意見やコメントなどをチェックしたか</li>
+                            <li><i class="fas fa-square"></i> タイトルにクエリは入っているか、そのタイトルで検索意図を満たせそうと思わせられるか</li>
+                            <li><i class="fas fa-square"></i> タイトルに、漢字、ひらがな、数字、英語などを入れ、読みやすくなるよう工夫したか</li>
+                            <li><i class="fas fa-square"></i> タイトルに対して、見出しの順番は合っているか、スラスラと読めるか</li>
+                            <li><i class="fas fa-square"></i> 文章では分かりづらい箇所に画像・図解が入っているか</li>
+                            <li><i class="fas fa-square"></i> 画像や図解近くの文言は画像を補足するもの、関連するものになっているか</li>
+                            <li><i class="fas fa-square"></i> その画像は画像検索で表示されるように工夫してあるか</li>
+                            <li><i class="fas fa-square"></i> 見出しは最適化されているか</li>
+                            <li><i class="fas fa-square"></i> 見出しに対する本文になっているか（見出しに対してのアンサー）</li>
+                            <li><i class="fas fa-square"></i> 適宜本文にCTAを設置し、CLされるように導入文を入れたか</li>
+                            <li><i class="fas fa-square"></i> 筆者の見解など、ちょっとした意見など入れているか</li>
+                            <li><i class="fas fa-square"></i> 口コミを入れているか ※特に比較記事、商標記事の場合</li>
+                            <li><i class="fas fa-square"></i> ここまで来て初めて冒頭文を作成するが、冒頭文はFVなので出来次第で読了率が変わる。改めて冒頭文を見直したか</li>
+                            <li><i class="fas fa-square"></i> 冒頭にCTAを設置し、CLされるように導入文を入れたか</li>
+                            <li><i class="fas fa-square"></i> FAQは入っているか　※適宜</li>
+                            <li><i class="fas fa-square"></i> 競合をチェックしたかディスクリプションで検索意図を満たせそうか</li>
+                            <li><i class="fas fa-square"></i> 強調スニペットを奪い取るために工夫をしたか</li>
+                            <li><i class="fas fa-square"></i> 参考文献（できれば引用）を適宜入れたか、AIに参考文献を収集させたか</li>
+                            <li><i class="fas fa-square"></i> 第三者にチェックしてもらい、不要な情報を取り除いたか</li>
+                            <li><i class="fas fa-square"></i> 投稿後、サチコにインデックス登録をしたか</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA・読了率チェック -->
+            <section class="impl-section">
+                <h2><span class="section-number">5.</span> CTA・読了率チェックリスト</h2>
+                <div class="content-card">
+                    <div class="checklist">
+                        <h3><i class="fas fa-clipboard-check"></i> CTA・読了率の確認</h3>
+                        <ul class="checklist-items">
+                            <li><i class="fas fa-square"></i> 投稿が完了し、検証モードのスマホ版でじっくり確認したか</li>
+                            <li><i class="fas fa-square"></i> 最後までストレスなく読めたか（テキストが続く箇所に画像を入れる　など）</li>
+                            <li><i class="fas fa-square"></i> CTAは頻繁に出てきてないか、少なすぎないか、文章の流れは自然か</li>
+                            <li><i class="fas fa-square"></i> 画像、画像位置は適切か</li>
+                            <li><i class="fas fa-square"></i> 最適な内部リンクを組んだか</li>
+                            <li><i class="fas fa-square"></i> 温度感の高い記事に移行させる工夫をしたか</li>
+                            <li><i class="fas fa-square"></i> 公開後、スマホ実機で入念に確認したか</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 施策後チェック -->
+            <section class="impl-section">
+                <h2><span class="section-number">6.</span> 施策後チェックリスト</h2>
+                <div class="content-card">
+                    <div class="checklist">
+                        <h3><i class="fas fa-clipboard-check"></i> 施策後の確認</h3>
+                        <ul class="checklist-items">
+                            <li><i class="fas fa-square"></i> 画像含め、全ての改修が完了1週間後に動向をチェック</li>
+                            <li><i class="fas fa-square"></i> ダメだったらリビジョンで戻す</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
+            <p>
+                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        function copyPrompt(button) {
+            const codeBlock = button.previousElementSibling.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> コピー完了';
+                button.style.background = '#28a745';
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
