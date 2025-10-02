@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メニュー & データベース設計 - Dify SEO記事自動執筆システム</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/menu.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">
+                <i class="fas fa-robot"></i>
+                Dify SEO記事自動執筆システム
+            </h1>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">ホーム</a></li>
+                <li><a href="menu.html" class="nav-link active">メニュー</a></li>
+                <li><a href="requirements.html" class="nav-link">要件定義</a></li>
+                <li><a href="implementation.html" class="nav-link">実装想定</a></li>
+                <li><a href="workflow.html" class="nav-link">ワークフロー</a></li>
+                <li><a href="prompts.html" class="nav-link">プロンプト集</a></li>
+                <li><a href="poc.html" class="nav-link">PoC報告</a></li>
+                <li><a href="setup.html" class="nav-link">設定手順</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="menu-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-sitemap"></i> メニュー &amp; データベース設計</h1>
+                <p class="page-subtitle">Notion と Dify を接続するためのページ構成・工程テンプレート</p>
+            </header>
+
+            <section id="menu-overview" class="menu-section">
+                <h2><span class="section-number">1.</span> 全体構成（サイト &amp; Notion）</h2>
+                <div class="content-card">
+                    <div class="menu-grid">
+                        <div class="menu-item">
+                            <h3><i class="fas fa-browser"></i> Webサイト側</h3>
+                            <ul>
+                                <li>ホーム：プロジェクト概要とシステムサマリー</li>
+                                <li>要件定義／実装想定／ワークフロー：従来ページを継続活用</li>
+                                <li><strong>メニュー（本ページ）</strong>：NotionテンプレートとDB定義のハブ</li>
+                                <li>プロンプト集・PoC報告・設定手順：運用ナレッジの集約</li>
+                            </ul>
+                        </div>
+                        <div class="menu-item">
+                            <h3><i class="fas fa-table"></i> Notion側</h3>
+                            <ul>
+                                <li>トップページ：本サイトと同じ章立てでリンク・DBを配置</li>
+                                <li>工程プロンプトDB：各工程のプロンプト・知識ファイルを管理</li>
+                                <li>リソースDB：Deepリサーチ資料、一次情報、雛形ファイルを保管</li>
+                                <li>タスクビュー：ステータス・担当・優先度で進行管理</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="db-structure" class="menu-section">
+                <h2><span class="section-number">2.</span> Notion テンプレート構造</h2>
+                <div class="content-card">
+                    <p class="section-intro">Notion では以下のデータベースを基本単位として管理します。カラム（プロパティ）構成の例を添えました。</p>
+                    <div class="table-wrapper">
+                        <table class="menu-table">
+                            <thead>
+                                <tr>
+                                    <th>DB名</th>
+                                    <th>主なプロパティ</th>
+                                    <th>用途</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>工程プロンプトDB</td>
+                                    <td>工程番号／工程名／AIモデル別プロンプト／知識ファイル／推奨モデル／更新日</td>
+                                    <td>各工程の仕様書・プロンプト・参照ファイルのハブ</td>
+                                </tr>
+                                <tr>
+                                    <td>リソースDB</td>
+                                    <td>分類（一次情報／競合要約／テンプレなど）／ファイル／最終更新</td>
+                                    <td>CSV・DOCX・Deepリサーチ資料を集約</td>
+                                </tr>
+                                <tr>
+                                    <td>タスク管理DB</td>
+                                    <td>工程番号（リレーション）／担当／ステータス／期日／コメント</td>
+                                    <td>人間オペレーション（工程0や最終レビュー）を可視化</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="prompt-db" class="menu-section">
+                <h2><span class="section-number">3.</span> 工程プロンプトDB（サンプル）</h2>
+                <div class="content-card">
+                    <p class="section-intro">工程ごとに UX 情報（心理学・行動経済学）を含めたプロンプトを管理します。以下は上位工程の例です。</p>
+                    <div class="table-wrapper">
+                        <table class="menu-table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>工程名</th>
+                                    <th>期待アウトプット</th>
+                                    <th>推奨モデル</th>
+                                    <th>参照ファイル</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>0</td>
+                                    <td>【人間】キーワード選定</td>
+                                    <td>テーマ／スコープ／狙いキーワード</td>
+                                    <td>人間</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>クエリ分析・ペルソナ深掘り分析</td>
+                                    <td>Question定義・疑問構造・想定ペルソナ</td>
+                                    <td>Claude</td>
+                                    <td>query_persona.csv / .docx</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>共起語・関連キーワード抽出</td>
+                                    <td>共起語リスト・FAQ候補・不足論点</td>
+                                    <td>ChatGPT</td>
+                                    <td>kyoki_words.csv</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>競合分析・差別化切り口発見</td>
+                                    <td>差別化要素・最新性チェック・ストーリー方針</td>
+                                    <td>Claude</td>
+                                    <td>competitor_analysis.docx</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>戦略的アウトライン生成</td>
+                                    <td>Markdownアウトライン／タイトル案</td>
+                                    <td>ChatGPT</td>
+                                    <td>outline.docx</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="note"><i class="fas fa-info-circle"></i> 6〜11工程（一次情報／本文生成／ファクトチェック／リライト／完成）も同様形式で登録し、知識ファイルを添付していきます。</p>
+                </div>
+            </section>
+
+            <section id="views" class="menu-section">
+                <h2><span class="section-number">4.</span> ビュー &amp; 運用例</h2>
+                <div class="content-card">
+                    <div class="menu-grid views">
+                        <div class="menu-item">
+                            <h3><i class="fas fa-layer-group"></i> ビュー構成</h3>
+                            <ul>
+                                <li><strong>工程順ビュー：</strong> 工程番号でソートし、全体フローを俯瞰</li>
+                                <li><strong>推奨モデルビュー：</strong> Claude / ChatGPT / Gemini の担当工程を色分け</li>
+                                <li><strong>ステータスビュー：</strong> 未着手／進行中／完了をカンバン表示</li>
+                            </ul>
+                        </div>
+                        <div class="menu-item">
+                            <h3><i class="fas fa-check-double"></i> 5重チェック運用</h3>
+                            <ol>
+                                <li>知識ファイル（CSV/DOCX) を添付し、プロンプトから参照</li>
+                                <li>AIが生成した内容をチェックシートで確認</li>
+                                <li>不足項目をタスク化し、再プロンプト</li>
+                                <li>Deepリサーチ結果を随時更新・差し替え</li>
+                                <li>完了した工程は「人間レビュー」を経て完結</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="handoff" class="menu-section">
+                <h2><span class="section-number">5.</span> Dify移行チェックリスト</h2>
+                <div class="content-card">
+                    <ul class="checklist">
+                        <li><span><i class="fas fa-check"></i></span> 各工程のプロンプトと知識ファイルが Notion DB に登録されている</li>
+                        <li><span><i class="fas fa-check"></i></span> 推奨AIモデルと役割分担が明確になっている</li>
+                        <li><span><i class="fas fa-check"></i></span> 人間担当工程（キーワード選定／最終レビュー）がタスク化されている</li>
+                        <li><span><i class="fas fa-check"></i></span> Deepリサーチ資料・一次情報が最新版で紐づいている</li>
+                        <li><span><i class="fas fa-check"></i></span> Difyワークフロー（json）に変換する際の設定項目が洗い出されている</li>
+                    </ul>
+                    <p class="note"><i class="fas fa-external-link-alt"></i> 各種テンプレートは <a href="requirements.html">要件定義</a>／<a href="workflow.html">ワークフロー</a>／<a href="prompts.html">プロンプト集</a> から参照できます。</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        <div class="container">
+            <p>&copy; 2025 Dify SEO記事自動執筆システム. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
