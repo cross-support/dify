@@ -108,12 +108,16 @@
 本プロジェクトでは、以下のドキュメントを管理しています：
 
 - **[管理サイト（GitHub Pages）](https://cross-support.github.io/dify/)**: プロジェクト全体の可視化
+- **[メニュー](menu.html)**: ドキュメント一覧・ナビゲーション
 - **[要件定義書](requirements.html)**: システム要件・仕様の詳細
 - **[実装想定](implementation.html)**: 技術実装の具体的な設計
 - **[ワークフロー](workflow.html)**: 12ステップの詳細プロンプト集
 - **[プロンプト集](prompts.html)**: 基本プロンプト・チェックリスト
 - **[PoC報告](poc.html)**: 実証実験の結果報告
 - **[設定手順](setup.html)**: Dify環境構築ガイド
+
+### ワークフローDSLファイル
+- **[seo-article-workflow-v1.0.json](dify-workflows/seo-article-workflow-v1.0.json)**: Difyインポート用DSLファイル
 
 ## 🚀 セットアップ
 
