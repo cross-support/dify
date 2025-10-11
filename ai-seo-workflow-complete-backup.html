@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI別SEO記事自動化フロー完全設計書（図解版）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 3px solid #667eea;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1e3c72;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: white;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+            scroll-margin-top: 80px;
+        }
+
+        h2 {
+            color: #1e3c72;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            position: relative;
+        }
+
+        h2::before {
+            content: "■";
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        h3 {
+            color: #2a5298;
+            font-size: 1.5rem;
+            margin: 30px 0 20px 0;
+            padding-left: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        h4 {
+            color: #4a5568;
+            font-size: 1.2rem;
+            margin: 20px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .workflow-overview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            color: white;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .step-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step-title {
+            color: #1e3c72;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .step-ai {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-time {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .step-importance {
+            margin-top: 10px;
+            color: #f59e0b;
+        }
+
+        .flowchart {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .flow-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #667eea;
+            min-width: 200px;
+            flex: 1;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .flow-box.gpt {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+
+        .flow-box.claude {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+
+        .flow-box.gemini {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+
+        .flow-box.human {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .ai-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .ai-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            border: 3px solid;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .ai-card.gpt {
+            border-color: #10b981;
+        }
+
+        .ai-card.claude {
+            border-color: #f59e0b;
+        }
+
+        .ai-card.gemini {
+            border-color: #3b82f6;
+        }
+
+        .ai-card h4 {
+            color: inherit;
+            margin-top: 0;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .ai-card.gpt h4 { color: #10b981; }
+        .ai-card.claude h4 { color: #f59e0b; }
+        .ai-card.gemini h4 { color: #3b82f6; }
+
+        .strength-list, .weakness-list {
+            margin: 15px 0;
+        }
+
+        .strength-list li {
+            color: #059669;
+            margin-bottom: 8px;
+        }
+
+        .weakness-list li {
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+
+        .prompt-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: auto;
+            border: 2px solid #475569;
+        }
+
+        .prompt-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .checklist {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .checklist li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .checklist li::marker {
+            content: "✓ ";
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .badge.essential {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge.recommended {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+
+        .badge.optional {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 25px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px #667eea;
+        }
+
+        .principle-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .principle-box h4 {
+            color: #92400e;
+            margin-top: 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 5px solid #ef4444;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 {
+            color: #991b1b;
+            margin-top: 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 5px solid #3b82f6;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .info-box h4 {
+            color: #1e40af;
+            margin-top: 0;
+        }
+
+        .science-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .science-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 3px solid #8b5cf6;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+        }
+
+        .science-card h4 {
+            color: #8b5cf6;
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .multi-ai-flow {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 3px solid #667eea;
+        }
+
+        .process-step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .process-step strong {
+            color: #1e3c72;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-row {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 AI別SEO記事自動化フロー完全設計書</h1>
+            <p>ChatGPT・Claude・Gemini 3大AIモデルの最適組み合わせによる12工程完全自動化システム<br>
+            脳科学・行動経済学・LLMO観点を統合した次世代SEOコンテンツ生成フレームワーク</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">全体概要</a></li>
+                <li><a href="#principles">4大原則</a></li>
+                <li><a href="#workflow">12工程フロー</a></li>
+                <li><a href="#ai-selection">AI選択ガイド</a></li>
+                <li><a href="#process-details">工程別詳細</a></li>
+                <li><a href="#prompts">プロンプト集</a></li>
+                <li><a href="#science">科学的根拠</a></li>
+                <li><a href="#checklist">品質チェック</a></li>
+                <li><a href="#management">プロジェクト管理</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- 全体概要 -->
+            <section id="overview">
+                <h2>📋 全体概要</h2>
+
+                <div class="principle-box">
+                    <h4>🎯 本システムの目的</h4>
+                    <p>ChatGPT（OpenAI GPT系）、Google Gemini（Bard改良版）、Anthropic Claudeという3つのLLMを用いて、SEO記事作成の全工程（0〜12工程）を自動化するフローを設計します。それぞれの工程ごとに、ユーザーニーズに最適な出力を得るためのプロンプト文を作成し、どのAIモデルがその工程に最適かを出力品質（内容の正確さ・網羅性・読者への響きやすさ）と安定性（大規模入力への対応力・一貫性・誤情報抑制）という観点で比較します。</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">工程数（0〜11）</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">AIモデル使用</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">60〜120分</div>
+                        <div class="stat-label">総所要時間</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">3000〜5000字</div>
+                        <div class="stat-label">目標文字数</div>
+                    </div>
+                </div>
+
+                <h3>🤖 各AIモデルの特性</h3>
+
+                <div class="ai-comparison">
+                    <div class="ai-card gpt">
+                        <h4>💚 ChatGPT (GPT-4)</h4>
+                        <p><strong>得意分野：</strong>創造性・文章力・読者共感</p>
+                        <ul class="strength-list">
+                            <li>人格を感じさせる魅力的な文章</li>
+                            <li>ブログ向け万能選手</li>
+                            <li>アウトライン生成・リライトに最適</li>
+                            <li>細かな指示遵守能力が高い</li>
+                        </ul>
+                        <ul class="weakness-list">
+                            <li>知識は2021年まで（最新情報に弱い）</li>
+                            <li>ハルシネーション（幻覚）のリスク</li>
+                            <li>コンテキスト制限（8K〜32Kトークン）</li>
+                        </ul>
+                    </div>
+
+                    <div class="ai-card claude">
+                        <h4>🧡 Claude</h4>
+                        <p><strong>得意分野：</strong>安定性・長文処理・分析力</p>
+                        <ul class="strength-list">
+                            <li>10万トークン超の大容量コンテキスト</li>
+                            <li>SEO戦略タスクでベンチマーク最高評価</li>
+                            <li>安全志向で事実誤認が少ない</li>
+                            <li>構造化された出力が得意</li>
+                        </ul>
+                        <ul class="weakness-list">
+                            <li>創造性はGPT-4に劣る</li>
+                            <li>リアルタイム検索不可</li>
+                            <li>やや保守的な提案傾向</li>
+                        </ul>
+                    </div>
+
+                    <div class="ai-card gemini">
+                        <h4>💙 Gemini</h4>
+                        <p><strong>得意分野：</strong>リアルタイム検索・最新情報・超長文処理</p>
+                        <ul class="strength-list">
+                            <li>Google検索とネイティブ統合</li>
+                            <li>最大100万トークンの処理能力</li>
+                            <li>最新データへのアクセス</li>
+                            <li>マルチモーダル対応</li>
+                        </ul>
+                        <ul class="weakness-list">
+                            <li>登場間もなく実績少ない</li>
+                            <li>出力の安定性に若干のばらつき</li>
+                            <li>日本語処理の精度は検証中</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4大原則 -->
+            <section id="principles">
+                <h2>⚡ 4大重要原則</h2>
+
+                <div class="workflow-overview">
+                    <h3 style="color: white; border: none;">記事品質を左右する絶対原則</h3>
+
+                    <div class="workflow-steps">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-title">QuestionとAnswerのズレをゼロに</div>
+                            <p>検索者の疑問に完全に答え切る。不要な情報で水増ししない、必要な情報を漏らさない。</p>
+                        </div>
+
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-title">情報のフレッシュネス最優先</div>
+                            <p>最新データ・最新統計・最新事例を必ず盛り込む。古いデータは競合との差別化を阻害する。</p>
+                        </div>
+
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-title">一次情報の組み込み</div>
+                            <p>政府機関・学術論文・公式発表など信頼性の高い一次情報を引用し、記事の権威性を高める。</p>
+                        </div>
+
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-title">10重チェック（スキップ厳禁）</div>
+                            <p>AIが勝手に省略・簡略化しないよう、10回の自己検証を指示。完璧な記事のみを出力。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12工程フロー -->
+            <section id="workflow">
+                <h2>🔄 12工程全体フロー</h2>
+
+                <div class="info-box">
+                    <h4>📊 工程間の依存関係と所要時間</h4>
+                    <p>各工程は前工程の出力を入力として受け取り、段階的に記事を完成させます。人間の介入ポイントも明確に定義されています。</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>工程</th>
+                            <th>工程名</th>
+                            <th>担当AI</th>
+                            <th>人間作業</th>
+                            <th>所要時間</th>
+                            <th>重要度</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>0</strong></td>
+                            <td>キーワード選定</td>
+                            <td><span class="badge optional">Gemini推奨</span></td>
+                            <td>最終承認</td>
+                            <td>30分〜2時間</td>
+                            <td>★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>Start（キーワード入力）</td>
+                            <td><span class="badge optional">システム</span></td>
+                            <td>入力</td>
+                            <td>1分</td>
+                            <td>★★★☆☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>Search（上位10サイト取得）</td>
+                            <td><span class="badge optional">Gemini/API</span></td>
+                            <td>-</td>
+                            <td>1〜3分</td>
+                            <td>★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2.1</strong></td>
+                            <td>Extract（競合本文抽出）</td>
+                            <td><span class="badge recommended">Claude推奨</span></td>
+                            <td>-</td>
+                            <td>3〜10分</td>
+                            <td>★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>クエリ分析・ペルソナ深掘り</td>
+                            <td><span class="badge essential">Claude必須</span></td>
+                            <td>確認</td>
+                            <td>5〜10分</td>
+                            <td>★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>共起語・関連キーワード抽出【心臓部】</td>
+                            <td><span class="badge essential">Claude必須</span></td>
+                            <td>確認</td>
+                            <td>5〜10分</td>
+                            <td>★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>競合分析・差別化発見</td>
+                            <td><span class="badge essential">Claude必須</span></td>
+                            <td>戦略確認</td>
+                            <td>10〜15分</td>
+                            <td>★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>戦略的アウトライン生成</td>
+                            <td><span class="badge recommended">ChatGPT推奨</span></td>
+                            <td>承認</td>
+                            <td>5〜10分</td>
+                            <td>★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>一次情報追加・知識ギャップ解消</td>
+                            <td><span class="badge essential">Gemini必須</span></td>
+                            <td>検証</td>
+                            <td>10〜20分</td>
+                            <td>★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8</strong></td>
+                            <td>本文生成・10重チェック指示</td>
+                            <td><span class="badge essential">Claude→ChatGPT</span></td>
+                            <td>確認</td>
+                            <td>10〜20分</td>
+                            <td>★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td><strong>9</strong></td>
+                            <td>ファクトチェック</td>
+                            <td><span class="badge essential">Gemini必須</span></td>
+                            <td>最終確認</td>
+                            <td>10〜20分</td>
+                            <td>★★★★★</td>
+                        </tr>
+                        <tr>
+                            <td><strong>10</strong></td>
+                            <td>最終リライト・品質向上</td>
+                            <td><span class="badge recommended">ChatGPT推奨</span></td>
+                            <td>承認</td>
+                            <td>5〜10分</td>
+                            <td>★★★★☆</td>
+                        </tr>
+                        <tr>
+                            <td><strong>11</strong></td>
+                            <td>SEO記事完成・最終出力</td>
+                            <td><span class="badge recommended">ChatGPT推奨</span></td>
+                            <td>最終確認</td>
+                            <td>3〜5分</td>
+                            <td>★★★☆☆</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- AI選択ガイド -->
+            <section id="ai-selection">
+                <h2>🎯 工程別AI選択ガイド</h2>
+
+                <div class="info-box">
+                    <h4>💡 複数AI併用の推奨パターン</h4>
+                    <p>各工程で複数のAIを段階的に使用することで、単一モデルでは実現困難な高品質を達成します。以下は各工程の最適な組み合わせです。</p>
+                </div>
+
+                <h3>工程0: キーワード選定</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Gemini</strong> - キーワード候補リスト生成（15〜20個）+ 検索ボリューム調査<br>
+                        <small>理由: リアルタイム検索で最新の検索トレンドを把握</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: ChatGPT</strong> - Gemini出力を評価し、ビジネス戦略との整合性をチェック<br>
+                        <small>理由: 論理的評価と説得力ある推奨理由の作成</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: 人間</strong> - 最終決定（リスク評価、自社リソース考慮）<br>
+                        <small>理由: ビジネス判断には人間の経験と直感が不可欠</small>
+                    </div>
+                </div>
+
+                <h3>工程2.1: 競合本文抽出</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Python Script (Beautiful Soup + Readability)</strong> - HTMLを取得し、本文抽出<br>
+                        <small>理由: 技術的な処理は専用ツールが最も確実</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: Claude</strong> - 抽出された本文を確認し、不要部分が残っている場合は追加クリーニング<br>
+                        <small>理由: 大容量コンテキストで10サイト分を一括処理可能</small>
+                    </div>
+                </div>
+
+                <h3>工程3: クエリ分析・ペルソナ深掘り</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Claude</strong> - 競合記事を分析し、検索意図（Question）を定義<br>
+                        <small>理由: SEO戦略タスクでベンチマーク最高評価</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: ChatGPT</strong> - Claudeの出力を読み、ペルソナの感情的側面を補完<br>
+                        <small>理由: 人間心理への洞察力が高い</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: 人間</strong> - 最終確認（ビジネス目標と整合しているか）<br>
+                        <small>理由: 戦略的判断には人間のチェックが必要</small>
+                    </div>
+                </div>
+
+                <h3>工程4: 共起語・関連キーワード抽出【心臓部】</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Claude（メイン）</strong> - 全競合記事を一括解析し、共起語を抽出<br>
+                        <small>理由: 10万トークン超の処理能力で漏れなく網羅</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: ChatGPT（ダブルチェック）</strong> - Claude出力を確認し、漏れがないか検証<br>
+                        <small>理由: 異なる視点での検証で精度向上</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: Gemini（補完）</strong> - 最新の関連キーワードを検索で補完<br>
+                        <small>理由: トレンドワードの追加</small>
+                    </div>
+                </div>
+
+                <h3>工程5: 競合分析・差別化発見</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Claude（分析）</strong> - 競合記事の強み・弱みを網羅的に分析<br>
+                        <small>理由: 構造化された詳細レポート生成が得意</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: ChatGPT（発想）</strong> - 差別化アイデアを創造的に提案<br>
+                        <small>理由: クリエイティブな切り口の発見</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: Gemini（最新性チェック）</strong> - 競合記事が古いデータを使っている場合、最新データを提案<br>
+                        <small>理由: リアルタイム検索による最新情報の補完</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 4: 人間（戦略決定）</strong> - 実現可能性と戦略的価値を評価し、最終決定<br>
+                        <small>理由: ビジネスインパクトの判断</small>
+                    </div>
+                </div>
+
+                <h3>工程6: 戦略的アウトライン生成</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: ChatGPT（創造性）</strong> - 読者を引きつけるアウトラインを生成<br>
+                        <small>理由: タイトル案・見出し案の魅力度が高い</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: Claude（論理性）</strong> - 論理的に穴のないアウトラインを生成<br>
+                        <small>理由: 構造の整合性チェック</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: 人間（統合）</strong> - 両者を比較し、良い部分を統合して最終アウトラインを決定<br>
+                        <small>理由: ベストオブブリードアプローチ</small>
+                    </div>
+                </div>
+
+                <h3>工程7: 一次情報追加・知識ギャップ解消</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Gemini（収集）</strong> - 最新の一次情報（統計、論文、公式発表等）を検索・収集<br>
+                        <small>理由: リアルタイム検索で最新データにアクセス</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: 人間（検証）</strong> - Geminiが提示したソースの信頼性を確認し、不適切なものを除外<br>
+                        <small>理由: 情報源の信頼性判断</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: Claude（統合）</strong> - 大量の一次情報を統合・要約<br>
+                        <small>理由: 複数ソースの効率的な統合</small>
+                    </div>
+                </div>
+
+                <h3>工程8: 本文生成・10重チェック指示</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Claude（ドラフト）</strong> - 網羅的で正確なドラフトを生成（情報の取りこぼしなし）<br>
+                        <small>理由: 全工程の出力を保持しつつ正確な本文を生成</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: ChatGPT（ブラッシュアップ）</strong> - Claudeドラフトの表現を豊かに、読みやすく調整<br>
+                        <small>理由: 文章の魅力度向上</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: 人間（最終確認）</strong> - ブランドトーンとの整合性、微調整<br>
+                        <small>理由: 企業独自のトーン確認</small>
+                    </div>
+                </div>
+
+                <h3>工程9: ファクトチェック</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: Gemini（検証）</strong> - 記事内の事実を一つずつ検索・検証<br>
+                        <small>理由: リアルタイム検索で最新ソースと照合</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: ChatGPT（整形）</strong> - Gemini出力を整形し、読みやすいレポートに<br>
+                        <small>理由: フォーマット整備</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: Claude（ダブルチェック）</strong> - Geminiと判定が異なる箇所を人間に報告<br>
+                        <small>理由: 第三者的検証</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 4: 人間（最終判断）</strong> - 特に「不明瞭」判定の事実について追加調査<br>
+                        <small>理由: グレーゾーンの判断</small>
+                    </div>
+                </div>
+
+                <h3>工程10: 最終リライト・品質向上</h3>
+                <div class="multi-ai-flow">
+                    <div class="process-step">
+                        <strong>Step 1: ChatGPT（リライト）</strong> - 文体統一、冗長表現削除、読みやすさ向上<br>
+                        <small>理由: 文章校正に最も優れる</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 2: Claude（検証）</strong> - ChatGPT版と比較し、情報の欠落がないか確認<br>
+                        <small>理由: リライト時の情報損失チェック</small>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="process-step">
+                        <strong>Step 3: 人間（最終承認）</strong> - 最終的な品質確認<br>
+                        <small>理由: 公開前の最終ゲート</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 続きは次のメッセージで -->
+
+        </div>
+    </div>
+</body>
+</html>
