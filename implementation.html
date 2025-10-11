@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>実装想定 | AI別SEO記事自動化フロー設計とモデル比較（完全版）</title>
+    <title>実装想定 - Dify SEO記事自動執筆システム</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/implementation.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -28,12 +28,549 @@
         </div>
     </nav>
 
-    <main class="shared-content-wrapper">
-        <div class="content-container">
-            <pre data-shared-content></pre>
+    <main class="implementation-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-code"></i> 実装想定</h1>
+                <p class="page-subtitle">システム定義・テスト仕様・具体的プロンプト設計</p>
+            </header>
+
+            <div class="implementation-toc">
+                <h3><i class="fas fa-list"></i> 目次</h3>
+                <ul>
+                    <li><a href="#seo-strategy-prompt">1. SEO記事戦略レポート作成プロンプト（3フェーズ版）</a></li>
+                    <li><a href="#poc-report">2. レポート資料（PoC実走報告書）</a></li>
+                    <li><a href="#system-definition">3. システム定義（Dify設計書）</a></li>
+                    <li><a href="#test-specs">4. テスト仕様書（サンプル）</a></li>
+                </ul>
+            </div>
+
+            <section id="seo-strategy-prompt" class="impl-section">
+                <h2><span class="section-number">1.</span> SEO記事戦略レポート作成プロンプト（3フェーズ版）</h2>
+                <div class="content-card">
+                    <div class="prompt-strategy-overview">
+                        <div class="strategy-header">
+                            <h3><i class="fas fa-lightbulb"></i> プロンプト概要</h3>
+                            <p>このプロンプトは「SEO記事戦略レポート」を自動で作り上げるための指示書です。キーワード選定から競合分析、検索意図の特定、ペルソナ定義、記事構成設計まで、SEO記事作成のプロセスをワンストップで実行します。</p>
+                        </div>
+
+                        <div class="phase-breakdown">
+                            <div class="phase-section">
+                                <h4><i class="fas fa-flag"></i> フェーズ1（準備）</h4>
+                                <div class="phase-details">
+                                    <ul>
+                                        <li>メインとなるキーワードを受け取る</li>
+                                        <li>そのキーワードで上位表示されている5サイトをユーザーと合意して分析の起点とする</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="phase-section">
+                                <h4><i class="fas fa-search"></i> フェーズ2（分析）</h4>
+                                <div class="phase-details">
+                                    <ul>
+                                        <li>5サイトを分析して関連キーワードを幅広く抽出</li>
+                                        <li>各関連キーワードごとに検索を行い、5サイトが何位に出てくるかを調査</li>
+                                        <li>その結果をマトリックス表にまとめ、検索意図の中心となるキーワードを再定義</li>
+                                        <li>ペルソナ（想定読者像）と検索意図を言語化した中間レポートを作成</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="phase-section">
+                                <h4><i class="fas fa-pen"></i> フェーズ3（記事設計）</h4>
+                                <div class="phase-details">
+                                    <ul>
+                                        <li>競合記事の強み・弱みを整理し、差別化できる切り口を発見</li>
+                                        <li>追加調査を行い、読者が疑問を解決しやすい記事ストーリーを設計</li>
+                                        <li>タイトル案や見出し構成を作成し、最終的なSEO記事戦略レポートとしてまとめる</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="enhanced-features">
+                            <h4><i class="fas fa-star"></i> SEO強化要素</h4>
+                            <div class="features-grid">
+                                <div class="feature-item">
+                                    <strong>競合順位マトリックス</strong>
+                                    <p>関連キーワード×競合サイトの順位を体系的に分析</p>
+                                </div>
+                                <div class="feature-item">
+                                    <strong>差別化戦略</strong>
+                                    <p>競合の強み・弱みから独自の切り口を発見</p>
+                                </div>
+                                <div class="feature-item">
+                                    <strong>ペルソナ深堀り</strong>
+                                    <p>検索意図の中心を再定義し、具体的な読者像を構築</p>
+                                </div>
+                                <div class="feature-item">
+                                    <strong>記事ストーリー設計</strong>
+                                    <p>読者の疑問解決に特化した論理的な構成</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="prompt-implementation">
+                            <h4><i class="fas fa-cogs"></i> Dify実装との対応</h4>
+                            <div class="implementation-mapping">
+                                <div class="mapping-item">
+                                    <span class="phase-label">フェーズ1</span>
+                                    <span class="arrow">→</span>
+                                    <span class="dify-nodes">Start + Search + Extract ノード</span>
+                                </div>
+                                <div class="mapping-item">
+                                    <span class="phase-label">フェーズ2</span>
+                                    <span class="arrow">→</span>
+                                    <span class="dify-nodes">GPT（関連KW抽出） + Search Matrix + Gemini（検索意図分析）</span>
+                                </div>
+                                <div class="mapping-item">
+                                    <span class="phase-label">フェーズ3</span>
+                                    <span class="arrow">→</span>
+                                    <span class="dify-nodes">GPT（競合分析・差別化） + GPT（戦略的アウトライン） + Loop（知識ギャップ解消）</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="poc-report" class="impl-section">
+                <h2><span class="section-number">2.</span> レポート資料（PoC実走報告書）</h2>
+                <div class="content-card">
+                    <div class="poc-example">
+                        <div class="example-header">
+                            <h3><i class="fas fa-flask"></i> 対象キーワード（例）</h3>
+                            <div class="keyword-tag">「派遣法 教育訓練 義務化」</div>
+                        </div>
+
+                        <div class="poc-results">
+                            <div class="poc-step">
+                                <h4><i class="fas fa-search"></i> 競合調査</h4>
+                                <div class="step-content">
+                                    <div class="result-item">
+                                        <strong>上位記事タイトル・見出しリスト化</strong>
+                                        <ul>
+                                            <li>派遣法改正による教育訓練義務化の全体像</li>
+                                            <li>派遣会社が知っておくべき教育訓練の基礎知識</li>
+                                            <li>キャリアアップ教育訓練の実施方法と注意点</li>
+                                        </ul>
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>頻出キーワード例</strong>
+                                        <div class="keyword-list">
+                                            <span class="keyword">#派遣法改正</span>
+                                            <span class="keyword">#教育訓練義務</span>
+                                            <span class="keyword">#キャリアアップ</span>
+                                            <span class="keyword">#段階的教育</span>
+                                            <span class="keyword">#派遣元責任</span>
+                                        </div>
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>FAQ例</strong>
+                                        <ul>
+                                            <li>対象者は？</li>
+                                            <li>費用負担は？</li>
+                                            <li>罰則は？</li>
+                                            <li>実施時間は？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="poc-step">
+                                <h4><i class="fas fa-users"></i> 検索意図・ペルソナ</h4>
+                                <div class="step-content">
+                                    <div class="persona-card">
+                                        <div class="persona-item">
+                                            <strong>検索意図</strong>
+                                            <p>派遣会社担当者が「義務化内容と対応方法」を知りたい</p>
+                                        </div>
+                                        <div class="persona-item">
+                                            <strong>ペルソナ</strong>
+                                            <p>派遣会社の教育担当、人材紹介の法令順守担当者</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="poc-step">
+                                <h4><i class="fas fa-list"></i> 見出し案（最終確定）</h4>
+                                <div class="step-content">
+                                    <div class="outline-structure">
+                                        <div class="outline-item h1">
+                                            <span class="outline-tag">H1</span>
+                                            派遣法の教育訓練義務化とは？最新対応まとめ
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            改正の背景と目的
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            対象となる派遣スタッフと企業の義務
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            必要な教育訓練の種類（基礎・キャリアアップ別）
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            派遣会社が守るべき対応ステップ
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            違反時のリスクと行政対応
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            実務でのよくある質問（FAQ）
+                                        </div>
+                                        <div class="outline-item h2">
+                                            <span class="outline-tag">H2</span>
+                                            まとめ：義務化対応を自社の強みにする
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="poc-step">
+                                <h4><i class="fas fa-pen"></i> 本文ドラフト（抜粋例）</h4>
+                                <div class="step-content">
+                                    <div class="draft-sample">
+                                        <p>派遣法の教育訓練義務化は、派遣労働者のキャリア形成を支援し、雇用の安定につなげることを目的としています。派遣元事業主は、就業年数に応じた教育訓練の実施が義務付けられており、違反すると行政処分や改善命令の対象となる場合があります。…</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="poc-step">
+                                <h4><i class="fas fa-check-circle"></i> ファクトチェック</h4>
+                                <div class="step-content">
+                                    <div class="fact-check-results">
+                                        <div class="check-item success">
+                                            <i class="fas fa-check"></i>
+                                            <strong>参照：</strong>厚生労働省「キャリアアップ教育訓練制度」PDF
+                                        </div>
+                                        <div class="check-item success">
+                                            <i class="fas fa-check"></i>
+                                            <strong>誤記なし、用語統一</strong>（例：「派遣社員」→「派遣労働者」統一）
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="poc-step">
+                                <h4><i class="fas fa-edit"></i> リライト（Claude処理後）</h4>
+                                <div class="step-content">
+                                    <div class="rewrite-improvements">
+                                        <ul>
+                                            <li>冗長表現を簡潔化</li>
+                                            <li>文末トーンをやさしく調整</li>
+                                            <li>FAQに自然な言い回し追加</li>
+                                            <li>読みやすい段落構成に最適化</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="poc-step final">
+                                <h4><i class="fas fa-file-alt"></i> 最終成果物</h4>
+                                <div class="step-content">
+                                    <div class="deliverables-grid">
+                                        <div class="deliverable-card">
+                                            <i class="fas fa-markdown"></i>
+                                            <h5>本文（Markdown形式）</h5>
+                                            <p>構造化された見出しとリスト形式</p>
+                                        </div>
+                                        <div class="deliverable-card">
+                                            <i class="fas fa-tags"></i>
+                                            <h5>メタ情報</h5>
+                                            <p>title/desc/slug/OG</p>
+                                        </div>
+                                        <div class="deliverable-card">
+                                            <i class="fas fa-link"></i>
+                                            <h5>内部リンク候補</h5>
+                                            <p>クロスラーニング関連記事</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="system-definition" class="impl-section">
+                <h2><span class="section-number">3.</span> システム定義（Dify設計書）</h2>
+                <div class="content-card">
+                    <div class="system-definition">
+                        <div class="definition-section">
+                            <h3><i class="fas fa-sign-in-alt"></i> 入力</h3>
+                            <div class="input-schema">
+                                <div class="schema-item">
+                                    <span class="param-name">ターゲットキーワード</span>
+                                    <span class="param-type">string</span>
+                                    <span class="param-required">必須</span>
+                                </div>
+                                <div class="schema-item">
+                                    <span class="param-name">ペルソナ条件</span>
+                                    <span class="param-type">string</span>
+                                    <span class="param-optional">任意</span>
+                                </div>
+                                <div class="schema-item">
+                                    <span class="param-name">記事タイプ</span>
+                                    <span class="param-type">enum</span>
+                                    <span class="param-values">解説/比較/事例など</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="definition-section">
+                            <h3><i class="fas fa-project-diagram"></i> ワークフロー構成（更新版）</h3>
+                            <div class="workflow-nodes">
+                                <div class="node-flow">
+                                    <div class="workflow-node" style="background: #667eea;">
+                                        <i class="fas fa-user"></i>
+                                        <span>⓪【人間】キーワード選定</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node start">
+                                        <i class="fas fa-play"></i>
+                                        <span>①Startノード（入力）</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
+                                    <div class="workflow-node">
+                                        <i class="fas fa-search"></i>
+                                        <span>②Searchノード（上位10サイト取得）</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node">
+                                        <i class="fas fa-file-export"></i>
+                                        <span>③Extractノード（本文抽出）</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
+                                    <div class="workflow-node gemini">
+                                        <i class="fab fa-google"></i>
+                                        <span>④Geminiノード（クエリ分析・ペルソナ深掘り）Question明確化</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node gpt" style="border: 3px solid #ff6b6b;">
+                                        <i class="fab fa-openai"></i>
+                                        <span>⑤GPTノード（共起語・関連KW抽出）【心臓部】Answer準備</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
+                                    <div class="workflow-node gpt">
+                                        <i class="fab fa-openai"></i>
+                                        <span>⑥GPTノード（競合分析・差別化）フレッシュネス最優先</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node gpt">
+                                        <i class="fab fa-openai"></i>
+                                        <span>⑦GPTノード（アウトライン生成＋knowledge_gaps出力）</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
+                                    <div class="workflow-node loop">
+                                        <i class="fas fa-sync"></i>
+                                        <span>⑧Loopノード（一次情報追加・ギャップ解消）国・公的機関データ優先</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node gpt">
+                                        <i class="fab fa-openai"></i>
+                                        <span>⑨GPTノード（本文生成・10重チェック指示）3,000〜10,000文字</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
+                                    <div class="workflow-node" style="background: #667eea;">
+                                        <i class="fas fa-check-double"></i>
+                                        <span>⑩GPT o3/o4ノード（ファクトチェック）真実/虚偽/不明瞭判定</span>
+                                    </div>
+                                    <div class="flow-arrow">→</div>
+                                    <div class="workflow-node claude">
+                                        <i class="fas fa-robot"></i>
+                                        <span>⑪Claudeノード（リライト・トーン調整）</span>
+                                    </div>
+                                </div>
+                                <div class="node-flow">
+                                    <div class="workflow-node end">
+                                        <i class="fas fa-flag-checkered"></i>
+                                        <span>⑫Endノード（SEO記事完成）QuestionとAnswerのズレがゼロ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="definition-section">
+                            <h3><i class="fas fa-sign-out-alt"></i> 出力</h3>
+                            <div class="output-schema">
+                                <div class="output-item">
+                                    <i class="fas fa-file-alt"></i>
+                                    <div>
+                                        <strong>Markdown記事本文</strong>
+                                        <p>見出し構造と内容</p>
+                                    </div>
+                                </div>
+                                <div class="output-item">
+                                    <i class="fas fa-tags"></i>
+                                    <div>
+                                        <strong>メタ情報</strong>
+                                        <p>title, desc, OG, slug</p>
+                                    </div>
+                                </div>
+                                <div class="output-item">
+                                    <i class="fas fa-link"></i>
+                                    <div>
+                                        <strong>内部リンク候補リスト</strong>
+                                        <p>関連記事への誘導</p>
+                                    </div>
+                                </div>
+                                <div class="output-item">
+                                    <i class="fas fa-bookmark"></i>
+                                    <div>
+                                        <strong>参考文献リスト</strong>
+                                        <p>引用元URLと要約</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="test-specs" class="impl-section">
+                <h2><span class="section-number">4.</span> テスト仕様書（サンプル）</h2>
+                <div class="content-card">
+                    <div class="test-specifications">
+                        <div class="test-category">
+                            <h3><i class="fas fa-vial"></i> テスト観点</h3>
+
+                            <div class="test-group">
+                                <h4><i class="fas fa-check-square"></i> 入力検証</h4>
+                                <div class="test-cases">
+                                    <div class="test-case">
+                                        <div class="test-id">TC001</div>
+                                        <div class="test-desc">キーワードのみで記事が生成されるか</div>
+                                        <div class="test-status pass">PASS</div>
+                                    </div>
+                                    <div class="test-case">
+                                        <div class="test-id">TC002</div>
+                                        <div class="test-desc">ペルソナ指定時に文体が変化するか</div>
+                                        <div class="test-status pass">PASS</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="test-group">
+                                <h4><i class="fas fa-cogs"></i> 機能テスト</h4>
+                                <div class="test-cases">
+                                    <div class="test-case">
+                                        <div class="test-id">TC003</div>
+                                        <div class="test-desc">Loopノードがknowledge_gapsを解消するまで反復するか</div>
+                                        <div class="test-status pass">PASS</div>
+                                    </div>
+                                    <div class="test-case">
+                                        <div class="test-id">TC004</div>
+                                        <div class="test-desc">競合記事の主要見出しが網羅されているか</div>
+                                        <div class="test-status pass">PASS</div>
+                                    </div>
+                                    <div class="test-case">
+                                        <div class="test-id">TC005</div>
+                                        <div class="test-desc">RAG参照に基づき正しい根拠を出力するか</div>
+                                        <div class="test-status warning">要確認</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="test-group">
+                                <h4><i class="fas fa-file-export"></i> 出力テスト</h4>
+                                <div class="test-cases">
+                                    <div class="test-case">
+                                        <div class="test-id">TC006</div>
+                                        <div class="test-desc">Markdown構造（H1/H2/H3, リスト）が整っているか</div>
+                                        <div class="test-status pass">PASS</div>
+                                    </div>
+                                    <div class="test-case">
+                                        <div class="test-id">TC007</div>
+                                        <div class="test-desc">Metaタグ要素が生成されるか</div>
+                                        <div class="test-status pass">PASS</div>
+                                    </div>
+                                    <div class="test-case">
+                                        <div class="test-id">TC008</div>
+                                        <div class="test-desc">誤字脱字・表記ゆれがなくなっているか（人が確認）</div>
+                                        <div class="test-status manual">手動確認</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="test-category">
+                            <h3><i class="fas fa-clipboard-check"></i> 受入基準</h3>
+                            <div class="acceptance-tests">
+                                <div class="acceptance-item success">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <strong>競合見出し80%以上網羅</strong>
+                                        <p>上位記事の主要トピックを包含</p>
+                                    </div>
+                                </div>
+                                <div class="acceptance-item success">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <strong>誤記ゼロ（法規根拠照合済み）</strong>
+                                        <p>RAGベースのファクトチェック通過</p>
+                                    </div>
+                                </div>
+                                <div class="acceptance-item success">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <strong>編集者レビューで修正時間△30%以上</strong>
+                                        <p>工数削減効果の実証</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="test-metrics">
+                            <h3><i class="fas fa-chart-line"></i> テスト結果サマリー</h3>
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value">85%</div>
+                                    <div class="metric-label">テスト通過率</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">12分</div>
+                                    <div class="metric-label">平均処理時間</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">90%</div>
+                                    <div class="metric-label">競合見出し網羅率</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">35%</div>
+                                    <div class="metric-label">編集工数削減</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
-    <script src="assets/js/shared-content.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
+            <p>
+                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
 </body>
 </html>

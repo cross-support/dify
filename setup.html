@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>設定手順 | AI別SEO記事自動化フロー設計とモデル比較（完全版）</title>
+    <title>設定手順 - Dify SEO記事自動執筆システム</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/setup.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -28,12 +28,535 @@
         </div>
     </nav>
 
-    <main class="shared-content-wrapper">
-        <div class="content-container">
-            <pre data-shared-content></pre>
+    <main class="setup-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-cogs"></i> 設定手順</h1>
+                <p class="page-subtitle">Dify SEO記事自動執筆システムの導入ガイド</p>
+            </header>
+
+            <div class="setup-overview">
+                <div class="overview-card">
+                    <h3><i class="fas fa-info-circle"></i> 設定完了までの流れ</h3>
+                    <p style="margin-bottom: 20px; color: #667eea; font-weight: bold;">
+                        <i class="fas fa-star"></i> まずは<strong>無料で試せる最小構成</strong>から始めましょう！
+                    </p>
+                    <div class="setup-flow">
+                        <div class="flow-step">
+                            <span class="step-number">1</span>
+                            <span>Difyアカウント作成（無料）</span>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <span class="step-number">2</span>
+                            <span>DSLインポート</span>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <span class="step-number">3</span>
+                            <span>手動でテストデータ作成</span>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <span class="step-number">4</span>
+                            <span>ワークフロー動作確認</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-left: 4px solid #28a745; border-radius: 4px;">
+                        <strong>💡 ポイント：</strong> 最初は外部API不要で、Difyの無料枠内でワークフローの流れを確認できます
+                    </div>
+                </div>
+            </div>
+
+            <!-- ステップ1: Difyアカウント作成 -->
+            <section class="setup-section">
+                <div class="section-header">
+                    <h2><span class="step-badge">ステップ1</span> Difyアカウント作成</h2>
+                    <div class="time-estimate"><i class="fas fa-clock"></i> 5分</div>
+                </div>
+                <div class="section-content">
+                    <div class="setup-card">
+                        <div class="card-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Dify公式サイトでアカウント作成</h3>
+                            <p>まずはDifyの公式サイトにアクセスしてアカウントを作成します。</p>
+                            <div class="action-buttons">
+                                <a href="https://dify.ai/" target="_blank" class="btn-primary">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Dify公式サイト
+                                </a>
+                                <a href="https://cloud.dify.ai/signin" target="_blank" class="btn-secondary">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    ログイン画面
+                                </a>
+                            </div>
+                            <div class="instructions">
+                                <h4><i class="fas fa-list-ol"></i> 作成手順</h4>
+                                <ol>
+                                    <li>「Sign up」をクリック</li>
+                                    <li>メールアドレスとパスワードを入力</li>
+                                    <li>メール認証を完了</li>
+                                    <li>基本情報を入力してアカウント設定完了</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ステップ2: テンプレートインポート -->
+            <section class="setup-section">
+                <div class="section-header">
+                    <h2><span class="step-badge">ステップ2</span> ワークフローテンプレートのインポート</h2>
+                    <div class="time-estimate"><i class="fas fa-clock"></i> 5分</div>
+                </div>
+                <div class="section-content">
+                    <div class="setup-card">
+                        <div class="card-icon">
+                            <i class="fas fa-file-import"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>テンプレートファイルを取り込む</h3>
+                            <p>リポジトリ内の <code>dify-workflows/seo-article-workflow-v1.0.json</code> をDifyにインポートして、ワークフローを読み込みます。</p>
+                            <div class="action-buttons">
+                                <a href="dify-workflows/seo-article-workflow-v1.0.json" class="btn-primary" download>
+                                    <i class="fas fa-download"></i>
+                                    DSLファイルをダウンロード
+                                </a>
+                                <a href="workflow.html" class="btn-secondary">
+                                    <i class="fas fa-eye"></i>
+                                    ノード構成を確認
+                                </a>
+                            </div>
+                            <div class="instructions">
+                                <h4><i class="fas fa-list-ol"></i> インポート手順</h4>
+                                <ol>
+                                    <li>Difyダッシュボードで「Workflow Apps」を開く</li>
+                                    <li>画面右上の「Import」→「Upload JSON」を選択</li>
+                                    <li><code>seo-article-workflow-v1.0.json</code> をアップロード</li>
+                                    <li>アプリ名と説明を確認して保存</li>
+                                </ol>
+                            </div>
+                            <div style="margin-top: 15px; padding: 12px; background: #f8f9fa; border-left: 4px solid #667eea; border-radius: 4px;">
+                                <strong>メモ:</strong> ブラウザから直接アップロードできない場合は、ファイル内容をコピーしてDifyのインポート画面に貼り付けても大丈夫です。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ステップ3: 基本設定 -->
+            <section class="setup-section">
+                <div class="section-header">
+                    <h2><span class="step-badge">ステップ3</span> 無料枠で使うための基本設定</h2>
+                    <div class="time-estimate"><i class="fas fa-clock"></i> 10分</div>
+                </div>
+                <div class="section-content">
+                    <div class="dify-setup-grid">
+                        <div class="setup-card">
+                            <div class="card-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Hostedモデルを割り当てる</h3>
+                                <p>Difyの無料プランに含まれるHostedモデルを使えば、外部APIキーなしで主要ノードを試せます。</p>
+                                <div class="instructions">
+                                    <ol>
+                                        <li>Difyダッシュボードで「Settings」→「Model Provider」→「Hosted」タブを開く</li>
+                                        <li>利用可能な <code>gpt-3.5-turbo</code> や <code>gpt-4o-mini</code> を有効化</li>
+                                        <li>ワークフローエディタで各LLMノードのモデルをHostedモデルに変更</li>
+                                        <li>ノードごとに「Test run」でレスポンス形式を確認</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setup-card">
+                            <div class="card-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Mock Responseで検索結果を再現</h3>
+                                <p>検索APIを使わずに検証するため、HTTPノードにモックデータを設定します。</p>
+                                <div class="instructions">
+                                    <ol>
+                                        <li>ワークフローで「② Search - 上位10サイト取得」ノードを開く</li>
+                                        <li>「Mock response」を有効化し、下記JSONを貼り付け</li>
+                                        <li>保存後に「Test run」でモックが返ることを確認</li>
+                                    </ol>
+                                </div>
+                                <pre><code>{
+  "results": [
+    {
+      "url": "https://example.com/article-a",
+      "title": "最新のSEO対策ガイド",
+      "content": "サンプル本文 A..."
+    },
+    {
+      "url": "https://example.com/article-b",
+      "title": "競合分析のポイント",
+      "content": "サンプル本文 B..."
+    }
+  ]
+}</code></pre>
+                                <p style="margin-top: 10px; font-size: 0.9rem; color: #555;">必要に応じて競合URLや本文を差し替えると、より実務に近いテストができます。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 12px; background: #f8f9fa; border-left: 4px solid #28a745; border-radius: 4px;">
+                        <strong>ポイント:</strong> この時点では外部APIは不要です。Hostedモデルとモックデータだけでワークフロー全体の流れを確認できます。
+                    </div>
+                </div>
+            </section>
+
+            <!-- ステップ4: 動作確認 -->
+            <section class="setup-section">
+                <div class="section-header">
+                    <h2><span class="step-badge">ステップ4</span> ワークフローの動作確認</h2>
+                    <div class="time-estimate"><i class="fas fa-clock"></i> 15分</div>
+                </div>
+                <div class="section-content">
+                    <div class="workflow-setup">
+                        <div class="setup-option">
+                            <h3><i class="fas fa-vial"></i> ノード単位でのテスト</h3>
+                            <p>まずは重要ノードを個別に動かし、モックデータやHostedモデルで想定通りに動作するか確認します。</p>
+                            <div class="manual-steps">
+                                <h4>チェックポイント</h4>
+                                <ul>
+                                    <li>Startノードにキーワード・ペルソナなどのテスト値を入力</li>
+                                    <li>SearchノードのMock Responseが下流ノードに渡るか確認</li>
+                                    <li>各LLMノードの出力がJSON形式で整っているかを確認</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="setup-option">
+                            <h3><i class="fas fa-play-circle"></i> 全体フローのテスト実行</h3>
+                            <p>入力フォームからワークフロー全体を実行し、記事案が生成されることを確認します。</p>
+                            <div class="manual-steps">
+                                <h4>テスト手順</h4>
+                                <ul>
+                                    <li>アプリ画面右上の「Run」→「Manual debugging」を選択</li>
+                                    <li>テストキーワード例：<code>リモートワーク 生産性</code></li>
+                                    <li>出力ログを確認し、プロンプトやMockデータの改善点をメモ</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #fff4e5; border-left: 4px solid #ff9800; border-radius: 4px;">
+                        <strong>Tip:</strong> 期待する出力にならない場合は、ノードごとにプロンプトを簡略化してから段階的に調整すると原因が切り分けやすくなります。
+                    </div>
+                </div>
+            </section>
+
+            <!-- ステップ5: テスト実行 -->
+            <section class="setup-section">
+                <div class="section-header">
+                    <h2><span class="step-badge">ステップ5</span> テスト実行と調整</h2>
+                    <div class="time-estimate"><i class="fas fa-clock"></i> 15分</div>
+                </div>
+                <div class="section-content">
+                    <div class="test-section">
+                        <div class="test-card">
+                            <h3><i class="fas fa-play"></i> 初回テスト実行</h3>
+                            <div class="test-params">
+                                <h4>テスト用パラメータ例</h4>
+                                <div class="param-examples">
+                                    <div class="param">
+                                        <span class="param-name">keyword</span>
+                                        <span class="param-value">"リモートワーク 生産性"</span>
+                                    </div>
+                                    <div class="param">
+                                        <span class="param-name">persona</span>
+                                        <span class="param-value">"中小企業の人事担当者"</span>
+                                    </div>
+                                    <div class="param">
+                                        <span class="param-name">article_type</span>
+                                        <span class="param-value">"解説"</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>まずは上記のようなシンプルな入力で全体を実行し、各ノードの出力が意図した形式になっているか確認します。</p>
+                        </div>
+
+                        <div class="troubleshooting">
+                            <h3><i class="fas fa-wrench"></i> よくある問題と解決方法</h3>
+                            <div class="trouble-items">
+                                <div class="trouble-item">
+                                    <div class="trouble-title">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        Hostedモデルの無料枠を使い切った
+                                    </div>
+                                    <div class="trouble-solution">
+                                        <ul>
+                                            <li>Difyダッシュボードの使用量メーターを確認</li>
+                                            <li>モデルをより軽量なHostedモデルに切り替える</li>
+                                            <li>時間をおいて再実行するか、有料APIへの接続を検討</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="trouble-item">
+                                    <div class="trouble-title">
+                                        <i class="fas fa-times-circle"></i>
+                                        モックデータが下流ノードに渡らない
+                                    </div>
+                                    <div class="trouble-solution">
+                                        <ul>
+                                            <li>Searchノードの「Use mock response」が有効か確認</li>
+                                            <li>モックJSONのキー名が後続ノードの参照と一致しているか確認</li>
+                                            <li>ノード接続に切断箇所がないかフロービューで確認</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="trouble-item">
+                                    <div class="trouble-title">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        JSON解析エラーが発生する
+                                    </div>
+                                    <div class="trouble-solution">
+                                        <ul>
+                                            <li>LLMノードのプロンプト内で「JSONのみ出力」と明示する</li>
+                                            <li>出力テンプレートにバリデーション用の <code>json_schema</code> を設定する</li>
+                                            <li>問題があるノードを単体テストし、整形処理を追加</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 発展: 外部API連携 -->
+            <section class="setup-section">
+                <div class="section-header">
+                    <h2><span class="step-badge">発展</span> 外部API連携で本番運用へ</h2>
+                    <div class="time-estimate"><i class="fas fa-lightbulb"></i> 任意</div>
+                </div>
+                <div class="section-content">
+                    <p>無料枠での検証が完了したら、以下のAPIを順次連携するとスケールや精度を高められます。不要なものは後回しで問題ありません。</p>
+                    <div class="api-grid">
+                        <div class="api-card">
+                            <div class="api-header">
+                                <i class="fab fa-openai"></i>
+                                <h3>OpenAI API</h3>
+                                <span class="required-badge">推奨</span>
+                            </div>
+                            <div class="api-content">
+                                <p>Hostedモデルより高品質な文章生成が必要になったら接続します。gpt-4系モデルで自然な日本語の長文を安定出力できます。</p>
+                                <div class="api-links">
+                                    <a href="https://platform.openai.com/" class="api-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        OpenAI Platform
+                                    </a>
+                                    <a href="https://platform.openai.com/api-keys" class="api-link">
+                                        <i class="fas fa-key"></i>
+                                        APIキー管理
+                                    </a>
+                                </div>
+                                <div class="setup-steps">
+                                    <h4>接続のポイント</h4>
+                                    <ul>
+                                        <li>有料プランに切り替えたら秘密鍵を発行</li>
+                                        <li>Difyの「Model Provider」でOpenAIを有効化</li>
+                                        <li>LLMノードで使用モデルをgpt-4系に変更</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-header">
+                                <i class="fab fa-google"></i>
+                                <h3>Google Gemini API</h3>
+                                <span class="required-badge">推奨</span>
+                            </div>
+                            <div class="api-content">
+                                <p>検索意図分析やペルソナ推定を強化したいときに導入します。無料枠（$0）でも月少量の利用が可能です。</p>
+                                <div class="api-links">
+                                    <a href="https://ai.google.dev/" class="api-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Google AI Studio
+                                    </a>
+                                    <a href="https://makersuite.google.com/app/apikey" class="api-link">
+                                        <i class="fas fa-key"></i>
+                                        APIキー作成
+                                    </a>
+                                </div>
+                                <div class="setup-steps">
+                                    <h4>接続のポイント</h4>
+                                    <ul>
+                                        <li>「Get API key」から新しいキーを作成</li>
+                                        <li>DifyでGoogleプロバイダーを追加しキーを登録</li>
+                                        <li>Geminiを使用するノードのモデルを切り替え</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-header">
+                                <i class="fas fa-robot"></i>
+                                <h3>Anthropic Claude API</h3>
+                                <span class="required-badge">推奨</span>
+                            </div>
+                            <div class="api-content">
+                                <p>最終リライトやナレッジギャップの埋め合わせに適しています。自然で読みやすい文章に磨き上げたい場合に追加します。</p>
+                                <div class="api-links">
+                                    <a href="https://console.anthropic.com/" class="api-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Anthropic Console
+                                    </a>
+                                    <a href="https://console.anthropic.com/settings/keys" class="api-link">
+                                        <i class="fas fa-key"></i>
+                                        APIキー管理
+                                    </a>
+                                </div>
+                                <div class="setup-steps">
+                                    <h4>接続のポイント</h4>
+                                    <ul>
+                                        <li>アカウント作成後にAPIキーを発行</li>
+                                        <li>DifyのAnthropic設定欄にキーを保存</li>
+                                        <li>最終仕上げノードのモデルをClaudeに変更</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="api-card">
+                            <div class="api-header">
+                                <i class="fas fa-search"></i>
+                                <h3>Bright Data API</h3>
+                                <span class="required-badge">高度オプション</span>
+                            </div>
+                            <div class="api-content">
+                                <p>大量のSERPデータを自動収集したい場合のみ利用します。無料検証では不要なため、メモ程度に残しておけば十分です。</p>
+                                <div class="api-links">
+                                    <a href="https://brightdata.com/" class="api-link">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Bright Data
+                                    </a>
+                                    <a href="https://brightdata.com/products/datasets" class="api-link">
+                                        <i class="fas fa-database"></i>
+                                        データセット
+                                    </a>
+                                </div>
+                                <div class="setup-steps">
+                                    <h4>接続のポイント</h4>
+                                    <ul>
+                                        <li>有料プラン契約後にSearch Engine Results APIを有効化</li>
+                                        <li>Difyのツール設定で認証情報を入力</li>
+                                        <li>モックから本番APIに切り替えて自動収集を開始</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cost-estimate">
+                        <h3><i class="fas fa-calculator"></i> 本番運用時の概算コスト</h3>
+                        <div class="cost-grid">
+                            <div class="cost-item">
+                                <span class="service">OpenAI API</span>
+                                <span class="cost">$20-50/月</span>
+                            </div>
+                            <div class="cost-item">
+                                <span class="service">Google Gemini</span>
+                                <span class="cost">無料枠あり〜$10/月</span>
+                            </div>
+                            <div class="cost-item">
+                                <span class="service">Claude API</span>
+                                <span class="cost">$15-30/月</span>
+                            </div>
+                            <div class="cost-item">
+                                <span class="service">Bright Data（必要な場合のみ）</span>
+                                <span class="cost">$500~/月</span>
+                            </div>
+                            <div class="cost-total">
+                                <span class="service"><strong>合計（Bright Data除く）</strong></span>
+                                <span class="cost"><strong>$35-90/月</strong></span>
+                            </div>
+                        </div>
+                        <p style="margin-top: 10px; font-size: 0.9rem; color: #555;">※ Bright Dataは高度な競合調査が必要な場合のみ導入してください。無料検証フェーズでは不要です。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- サポート情報 -->
+            <section class="support-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-life-ring"></i> サポート・参考情報</h2>
+                </div>
+                <div class="section-content">
+                    <div class="support-grid">
+                        <div class="support-card">
+                            <i class="fas fa-book"></i>
+                            <h3>公式ドキュメント</h3>
+                            <p>各サービスの詳細な設定方法</p>
+                            <div class="support-links">
+                                <a href="https://docs.dify.ai/" target="_blank">Dify公式ドキュメント</a>
+                                <a href="https://platform.openai.com/docs" target="_blank">OpenAI API ドキュメント</a>
+                            </div>
+                        </div>
+
+                        <div class="support-card">
+                            <i class="fas fa-users"></i>
+                            <h3>コミュニティ</h3>
+                            <p>他のユーザーとの情報交換</p>
+                            <div class="support-links">
+                                <a href="https://discord.gg/dify" target="_blank">Dify Discord</a>
+                                <a href="https://github.com/langgenius/dify" target="_blank">Dify GitHub</a>
+                            </div>
+                        </div>
+
+                        <div class="support-card">
+                            <i class="fas fa-video"></i>
+                            <h3>チュートリアル動画</h3>
+                            <p>実際の設定手順を動画で確認</p>
+                            <div class="support-links">
+                                <a href="https://www.youtube.com/c/DifyAI" target="_blank">Dify YouTube</a>
+                                <a href="#" onclick="alert('準備中です')">設定手順動画（準備中）</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
-    <script src="assets/js/shared-content.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
+            <p>
+                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 外部リンクに target="_blank" を自動設定
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+            if (!link.hasAttribute('target')) {
+                link.setAttribute('target', '_blank');
+            }
+        });
+    </script>
 </body>
 </html>

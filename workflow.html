@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ワークフロー | AI別SEO記事自動化フロー設計とモデル比較（完全版）</title>
+    <title>Difyワークフロー構成例 - Dify SEO記事自動執筆システム</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/workflow.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar">
@@ -21,19 +22,993 @@
                 <li><a href="requirements.html" class="nav-link">要件定義</a></li>
                 <li><a href="implementation.html" class="nav-link">実装想定</a></li>
                 <li><a href="workflow.html" class="nav-link active">ワークフロー</a></li>
-                <li><a href="prompts.html" class="nav-link">プロンプト集</a></li>
                 <li><a href="poc.html" class="nav-link">PoC報告</a></li>
                 <li><a href="setup.html" class="nav-link">設定手順</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="shared-content-wrapper">
-        <div class="content-container">
-            <pre data-shared-content></pre>
+    <main class="workflow-main">
+        <div class="container">
+            <header class="page-header">
+                <h1><i class="fas fa-project-diagram"></i> Difyワークフロー構成例</h1>
+                <p class="page-subtitle">具体的プロンプト・ノード設定・実装ガイド</p>
+            </header>
+
+            <div class="workflow-toc">
+                <h3><i class="fas fa-list"></i> SEO記事戦略レポート：3フェーズワークフロー</h3>
+
+                <!-- フェーズ概要 -->
+                <div class="phase-overview">
+                    <div class="phase-card">
+                        <div class="phase-header phase-1">
+                            <span class="phase-num">フェーズ1</span>
+                            <span class="phase-title">準備</span>
+                        </div>
+                        <div class="phase-content">
+                            <p>メインキーワード受け取り → 上位10サイト取得 → 分析起点設定</p>
+                        </div>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-header phase-2">
+                            <span class="phase-num">フェーズ2</span>
+                            <span class="phase-title">分析</span>
+                        </div>
+                        <div class="phase-content">
+                            <p>関連キーワード抽出 → 競合順位調査 → マトリックス作成 → 検索意図特定 → 中間レポート作成</p>
+                        </div>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-header phase-3">
+                            <span class="phase-num">フェーズ3</span>
+                            <span class="phase-title">記事設計</span>
+                        </div>
+                        <div class="phase-content">
+                            <p>競合分析 → 差別化切り口発見 → 追加調査 → 記事ストーリー設計 → SEO記事戦略レポート完成</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 詳細ワークフロー -->
+                <div class="workflow-overview">
+                    <div class="overview-step">
+                        <span class="step-num">0</span>
+                        <span>【人間】キーワード選定</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">1</span>
+                        <span>Start（キーワード入力）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">2</span>
+                        <span>Search（上位10サイト取得）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">3</span>
+                        <span>Extract（競合本文抽出）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">4</span>
+                        <span>Gemini（クエリ分析・ペルソナ深掘り）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">5</span>
+                        <span>GPT（共起語・関連キーワード抽出）【心臓部】</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">6</span>
+                        <span>GPT（競合分析・差別化切り口発見）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">7</span>
+                        <span>GPT（アウトライン生成）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">8</span>
+                        <span>Loop（一次情報追加・知識ギャップ解消）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">9</span>
+                        <span>GPT（本文生成・10重チェック指示）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">10</span>
+                        <span>GPT o3/o4（ファクトチェック）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">11</span>
+                        <span>Claude（リライト）</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="overview-step">
+                        <span class="step-num">12</span>
+                        <span>End（SEO記事完成）</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workflow-nodes">
+                <!-- ① Start ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header start">
+                        <div class="node-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>① Start ノード（ユーザー入力）</h2>
+                            <p>ワークフローの開始点、ユーザーからの入力を受け取る</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-cog"></i> 入力変数設定</h3>
+                            <div class="config-grid">
+                                <div class="config-item">
+                                    <div class="config-label">keyword</div>
+                                    <div class="config-type">string</div>
+                                    <div class="config-desc">例：「派遣法 教育訓練 義務化」</div>
+                                </div>
+                                <div class="config-item">
+                                    <div class="config-label">persona</div>
+                                    <div class="config-type">string (optional)</div>
+                                    <div class="config-desc">例：「派遣会社 教育担当」</div>
+                                </div>
+                                <div class="config-item">
+                                    <div class="config-label">article_type</div>
+                                    <div class="config-type">enum</div>
+                                    <div class="config-desc">例：「解説」/「比較」/「事例」</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⓪ キーワード選定（人間作業） -->
+                <section class="workflow-node-section">
+                    <div class="node-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="node-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⓪【人間作業】キーワード選定</h2>
+                            <p>問い合わせ獲得・CV目的に基づいたキーワード決定</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-tasks"></i> 作業内容</h3>
+                            <ul style="padding-left: 20px; line-height: 1.8;">
+                                <li><strong>目的の明確化：</strong>問い合わせ獲得、資料DL、認知拡大など</li>
+                                <li><strong>ターゲット設定：</strong>誰に向けた記事か（例：派遣会社の教育担当者）</li>
+                                <li><strong>キーワード選定：</strong>検索ボリューム、競合性、CVへの距離を考慮</li>
+                                <li><strong>記事タイプ決定：</strong>悩み解決型 or 情報提供型</li>
+                                <li><strong>クエリの確認：</strong>Google検索窓のサジェストキーワード確認</li>
+                            </ul>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 決定事項</h3>
+                            <ul style="padding-left: 20px; line-height: 1.8;">
+                                <li><strong>メインキーワード：</strong>1つに絞る（SEO原則）</li>
+                                <li><strong>記事の方向性：</strong>問い合わせまでの導線設計</li>
+                                <li><strong>ペルソナ想定：</strong>読者像の仮説</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ② Search ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header search">
+                        <div class="node-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>② Search ノード（競合記事検索）</h2>
+                            <p>上位10サイトを取得して徹底分析</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-plug"></i> プラグイン設定</h3>
+                            <div class="plugin-info">
+                                <div class="plugin-name">検索プラグイン（Dify内蔵 or 外部API）</div>
+                                <div class="plugin-settings">
+                                    <div class="setting-row">
+                                        <span class="setting-label">検索クエリ</span>
+                                        <code>{{keyword}}</code>
+                                    </div>
+                                    <div class="setting-row">
+                                        <span class="setting-label">検索件数</span>
+                                        <code>10件</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">search_results</span>
+                                <span class="var-desc">タイトル/URL/スニペット一覧（10件）</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ③ Extract ノード -->
+                <section class="workflow-node-section">
+                    <div class="node-header extract">
+                        <div class="node-icon">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>③ Extract ノード（本文抽出）</h2>
+                            <p>競合記事の詳細コンテンツを取得</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-plug"></i> プラグイン設定</h3>
+                            <div class="plugin-info">
+                                <div class="plugin-name">Scrape as Markdown</div>
+                                <div class="plugin-settings">
+                                    <div class="setting-row">
+                                        <span class="setting-label">入力URL</span>
+                                        <code>{{search_results.urls}}</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">competitor_articles</span>
+                                <span class="var-desc">各記事の本文（Markdown形式）</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ④ Gemini ノード（クエリ分析・ペルソナ深掘り）【4と6を入れ替え】 -->
+                <section class="workflow-node-section">
+                    <div class="node-header gemini">
+                        <div class="node-icon">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>④ Gemini ノード（クエリ分析・ペルソナ深掘り分析）</h2>
+                            <p>検索クエリを分析し、Question（検索意図）を明確化</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">Gemini Pro</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはSEOエキスパートです。
+キーワード「{{keyword}}」をGoogle検索窓に入れた際のサジェストクエリと、上位10記事を分析し、
+検索者の「Question（疑問・検索意図）」を明確化してください。
+
+【作業手順】
+1. 検索クエリサジェスト分析
+   - Google検索窓に表示されるサジェストキーワードを確認
+   - 関連性の高いクエリの傾向を把握
+
+2. ペルソナ深掘り
+   - このキーワードで検索する人の具体像（職種、課題、目的）
+   - 検索者が真に知りたいこと（Question）
+
+3. Question の明確化
+   - 「何を知りたいのか」を一文で表現
+   - 検索者の疑問を段階的に分解（疑問A → 疑問B → 疑問C）
+
+【重要】
+- QuestionとAnswerのズレがないことが良質記事の条件です
+- 検索者の疑問を正確に捉え、後続のAnswer作成に繋げます
+
+【出力形式】JSON
+{
+  "query_suggestions": ["サジェスト1", "サジェスト2", ...],
+  "persona_profile": "具体的なペルソナ像",
+  "core_question": "検索者の中心的な疑問（一文）",
+  "question_breakdown": ["疑問A", "疑問B", "疑問C"],
+  "tone_guideline": "推奨トーン・文体"
+}
+
+入力: {{keyword}}, {{competitor_articles}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var">
+                                    <span class="var-name">query_suggestions[]</span>
+                                    <span class="var-desc">検索サジェストクエリ</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">core_question</span>
+                                    <span class="var-desc">検索者の中心的疑問（Question）</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">persona_profile</span>
+                                    <span class="var-desc">具体的ペルソナ像</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">tone_guideline</span>
+                                    <span class="var-desc">推奨文体・トーン</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑤ GPT ノード（共起語・関連キーワード抽出）【心臓部・4と6を入れ替え】-->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt" style="border: 3px solid #ff6b6b;">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑤ GPT ノード（共起語・関連キーワード抽出）【心臓部】</h2>
+                            <p>Questionに対する的確なAnswerを作成するための材料抽出</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはSEOエキスパートです。
+この工程は「心臓部」です。Questionに対する的確なAnswerを作成するため、
+競合記事から「共起語」と「関連キーワード」を徹底抽出してください。
+
+【作業手順】
+1. クエリの確認（最優先）
+   - Google検索窓のサジェストクエリ: {{query_suggestions}}
+   - これらのクエリから、検索者のニーズを把握
+
+2. 共起語の抽出
+   - 競合10記事で頻出する単語・フレーズを抽出
+   - AND検索なのかOR検索なのかを判断
+   - 全記事共通の共起語を優先（重要度高）
+
+3. 関連キーワードの抽出
+   - メインキーワード「{{keyword}}」の類義語・関連語
+   - 見出しパターンの分析
+   - FAQ・よくある疑問の整理
+
+4. Answer準備
+   - 上記の材料を用いて「Question: {{core_question}}」に答えられるか確認
+   - 不足している論点・切り口を指摘
+
+【重要原則】
+✓ QuestionとAnswerのズレをなくす
+✓ 競合が見落としている論点を発見する
+
+【出力形式】JSON
+{
+  "kyoki_words": ["共起語1", "共起語2", ...],
+  "related_keywords": ["関連KW1", "関連KW2", ...],
+  "headings_patterns": ["見出しパターン1", ...],
+  "faqs": ["FAQ1", "FAQ2", ...],
+  "missing_topics": ["競合が見落としている論点1", ...],
+  "sources": ["URL1", "URL2", ...]
+}
+
+入力: {{keyword}}, {{core_question}}, {{query_suggestions}}, {{competitor_articles}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var important">
+                                    <span class="var-name">kyoki_words[]</span>
+                                    <span class="var-desc">共起語（頻出単語・フレーズ）</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">related_keywords[]</span>
+                                    <span class="var-desc">関連キーワード</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">headings_patterns[]</span>
+                                    <span class="var-desc">競合見出しパターン</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">faqs[]</span>
+                                    <span class="var-desc">よくある質問</span>
+                                </div>
+                                <div class="output-var important">
+                                    <span class="var-name">missing_topics[]</span>
+                                    <span class="var-desc">競合の見落とし論点</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑥ GPT ノード（競合分析・差別化戦略） -->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑥ GPT ノード（競合分析・差別化切り口発見）</h2>
+                            <p>競合の強み・弱みを整理し、情報のフレッシュネスと独自の切り口を発見</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはSEOエキスパートです。
+競合分析から差別化戦略を策定してください。
+
+【最重要】差別化の2大要素
+1. 情報のフレッシュネス（最新性）を最優先で考慮
+2. 競合が見落としている論点・切り口の発見（必須）
+
+【分析材料】
+- 競合記事: {{competitor_articles}}
+- 検索意図（Question）: {{core_question}}
+- ペルソナ: {{persona_profile}}
+- 共起語: {{kyoki_words}}
+- 見落とし論点: {{missing_topics}}
+
+【分析内容】
+1. 各競合記事の強み・弱みを整理
+2. 【必須】競合が見落としている論点・切り口を発見
+3. 【最優先】情報のフレッシュネス分析
+   - 最新データは引用されているか？
+   - 法改正・制度変更は反映されているか？
+   - 競合記事の更新日時は？
+4. ペルソナにとって最も価値のある差別化要素を特定
+5. 読者の疑問を解決しやすい記事ストーリーの方向性を提案
+
+【出力形式】JSON
+{
+  "competitor_analysis": {
+    "strengths": ["競合の強み1", "競合の強み2"],
+    "weaknesses": ["競合の弱み1", "競合の弱み2"]
+  },
+  "freshness_analysis": {
+    "latest_data_found": "最新データの有無",
+    "update_dates": ["競合記事の更新日"],
+    "freshness_opportunity": "フレッシュネスで勝てるポイント"
+  },
+  "differentiation_opportunities": ["差別化切り口1", "差別化切り口2"],
+  "story_direction": "記事ストーリーの方向性"
+}
+
+入力: {{keyword}}, {{core_question}}, {{competitor_articles}}, {{kyoki_words}}, {{missing_topics}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var">
+                                    <span class="var-name">competitor_analysis</span>
+                                    <span class="var-desc">競合の強み・弱み分析</span>
+                                </div>
+                                <div class="output-var important">
+                                    <span class="var-name">freshness_analysis</span>
+                                    <span class="var-desc">情報のフレッシュネス分析</span>
+                                </div>
+                                <div class="output-var important">
+                                    <span class="var-name">differentiation_opportunities</span>
+                                    <span class="var-desc">差別化切り口（必須）</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">story_direction</span>
+                                    <span class="var-desc">記事ストーリー方向性</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑧ GPT ノード（アウトライン生成） -->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑧ GPT ノード（戦略的アウトライン生成）</h2>
+                            <p>差別化戦略を反映した記事構成を作成し、タイトル・見出し案を生成</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはSEO戦略レポート作成のエキスパートです。
+差別化戦略を反映した、読者の疑問解決に特化した記事アウトラインを作成してください。
+
+【戦略的要素】
+- 検索意図: {{core_search_intent}}
+- ペルソナ: {{persona_profile}}
+- 差別化切り口: {{differentiation_opportunities}}
+- 記事ストーリー方向性: {{story_direction}}
+- 競合見出しパターン: {{headings_patterns}}
+- FAQ: {{faqs}}
+
+【アウトライン作成要件】
+1. 競合にはない独自の切り口を盛り込む
+2. ペルソナの疑問を段階的に解決する構成にする
+3. 検索意図を満たしつつ、差別化要素を強調する
+4. タイトル案も複数提案する
+
+【出力形式】
+{
+  "title_options": ["タイトル案1", "タイトル案2", "タイトル案3"],
+  "outline": [
+    {"level": "H1", "text": "見出し"},
+    {"level": "H2", "text": "見出し"},
+    {"level": "H3", "text": "見出し"}
+  ],
+  "knowledge_gaps": ["不足情報1", "不足情報2"],
+  "unique_value_props": ["独自価値1", "独自価値2"]
+}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-vars">
+                                <div class="output-var">
+                                    <span class="var-name">outline[]</span>
+                                    <span class="var-desc">記事アウトライン</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">title_options[]</span>
+                                    <span class="var-desc">戦略的タイトル案</span>
+                                </div>
+                                <div class="output-var important">
+                                    <span class="var-name">knowledge_gaps[]</span>
+                                    <span class="var-desc">不足している論点（ループ判定用）</span>
+                                </div>
+                                <div class="output-var">
+                                    <span class="var-name">unique_value_props[]</span>
+                                    <span class="var-desc">記事の独自価値提案</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑧ Loop ノード（一次情報追加・知識ギャップ解消） -->
+                <section class="workflow-node-section">
+                    <div class="node-header loop">
+                        <div class="node-icon">
+                            <i class="fas fa-sync"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑧ Loop ノード（一次情報追加・知識ギャップ解消）</h2>
+                            <p>信頼性の高い一次情報を組み込み、知識ギャップを徹底的に解消</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-cog"></i> ループ条件</h3>
+                            <div class="loop-conditions">
+                                <div class="condition-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <code>knowledge_gaps.length > 0</code>
+                                </div>
+                                <div class="condition-operator">かつ</div>
+                                <div class="condition-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <code>loop_count < 3</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loop-process">
+                            <h3><i class="fas fa-cogs"></i> ループ内処理（最重要）</h3>
+                            <div class="process-steps">
+                                <div class="process-step" style="border-left: 4px solid #ff6b6b;">
+                                    <span class="step-number">1</span>
+                                    <span><strong>【最優先】一次情報の組み込み</strong><br>
+                                    - 国・銀行・公的機関の最新データ<br>
+                                    - 信頼性が高く鮮度のある情報を優先<br>
+                                    - 法規・政策・ガイドラインの引用</span>
+                                </div>
+                                <div class="process-step">
+                                    <span class="step-number">2</span>
+                                    <span>追加調査項目での再Search → Extract → 分析</span>
+                                </div>
+                                <div class="process-step">
+                                    <span class="step-number">3</span>
+                                    <span>差別化要素を強化し、アウトライン更新</span>
+                                </div>
+                                <div class="process-step">
+                                    <span class="step-number">4</span>
+                                    <span>knowledge_gaps を再評価（ゼロになるまで繰り返し）</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prompt-section" style="margin-top: 20px;">
+                            <h3><i class="fas fa-comment-dots"></i> 一次情報収集プロンプト</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">【一次情報収集プロンプト】
+
+[入力されたキーワード]に関する一次情報を以下の条件で収集してください。
+
+### 収集する情報の種類：
+1. 公的機関の統計データ・調査結果
+2. 学術論文・研究報告書
+3. 業界団体の公式発表・レポート
+4. 政府機関の政策・ガイドライン
+5. 大手企業の公式プレスリリース・決算報告
+6. 専門家・有識者の公式見解（インタビュー記事など）
+
+### 情報収集の条件：
+- 過去2年以内の最新情報を優先
+- 日本語情報を中心に、必要に応じて英語情報も含める
+- 出典元のURLと発表日を必ず明記
+- 情報の信頼性を3段階で評価（高・中・低）
+
+### 出力形式：
+各情報について以下の形式でまとめてください：
+
+**情報タイトル**
+- 情報源：[組織名/著者名]
+- 発表日：[YYYY年MM月DD日]
+- URL：[リンク]
+- 信頼性：[高/中/低]
+- 要約：[100文字程度で要点をまとめる]
+- SEO活用ポイント：[この情報をどのように記事に活用できるか]</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑨ GPT ノード（本文生成・10重チェック指示） -->
+                <section class="workflow-node-section">
+                    <div class="node-header gpt">
+                        <div class="node-icon">
+                            <i class="fab fa-openai"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑨ GPT ノード（本文生成・10重チェック指示）</h2>
+                            <p>QuestionとAnswerのズレをなくし、高品質な記事本文を作成</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT-4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">あなたはSEOエキスパートです。
+以下の条件で、QuestionとAnswerのズレがない高品質なSEO記事本文を作成してください。
+
+【最重要原則】
+✓ QuestionとAnswerのズレをゼロにする
+✓ 情報をスキップしない（10重チェック指示）
+
+【記事戦略】
+- Question（検索意図）: {{core_question}}
+- ペルソナ: {{persona_profile}}
+- トーン: {{tone_guideline}}
+- 共起語: {{kyoki_words}}
+- 差別化切り口: {{differentiation_opportunities}}
+- 一次情報: {{primary_sources}}
+
+【本文作成要件】
+1. 【最優先】QuestionとAnswerのズレをなくす
+   - 検索者の疑問に対して、的確に回答する
+   - 不要な情報を入れない、必要な情報を漏らさない
+
+2. 競合記事の文字数を参考にボリューム調整
+   - 通常3,000〜10,000文字の範囲
+   - 内容が薄い記事を長く書かない
+   - 簡潔に解決できることは簡潔に
+
+3. 一次情報（最新データ）を必ず組み込む
+   - 国・公的機関・銀行等の信頼できるデータ
+   - 引用元URLを明記
+
+4. 【重要】10重チェック指示
+   - 出力前に、提供した知識データを10回チェックする
+   - スキップ厳禁：AIが勝手に省略しないよう徹底
+   - 時間がかかっても確実性を優先
+
+5. 出力はMarkdown形式（H1/H2/H3見出し、箇条書き使用）
+
+アウトライン: {{outline}}
+競合記事の平均文字数: {{avg_word_count}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">draft_article</span>
+                                <span class="var-desc">記事ドラフト（Markdown形式・10重チェック済み）</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑩ GPT o3/o4 ノード（ファクトチェック） -->
+                <section class="workflow-node-section">
+                    <div class="node-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="node-icon">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑩ GPT o3/o4 ノード（ファクトチェック）</h2>
+                            <p>最高精度のファクトチェックで誤情報をゼロに</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">GPT o3 / GPT o4（高精度モデル）</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> ファクトチェックプロンプト</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">【ファクトチェックプロンプト（GPT o3/o4用）】
+
+【目的】
+この記事の全文をファクトチェックしてください。
+あらゆる手段を尽くして、以下の手順に従って進めてください。
+
+【手順】
+1. 記事を精読し、含まれる主張・数値・引用などの「事実」を一つずつ抽出してください。
+2. 抽出した事実ごとに調査を行い、「真実」「虚偽」「不明瞭」のいずれかを判定してください。
+3. 各事実について、信頼性の高い独立した情報源を最低3件探し、判定の根拠として示してください。
+   ※学術論文、政府・公的機関、一次資料、主要報道などを優先
+
+【出力形式】
+以下の3セクションに分けて一覧化してください。
+
+■ 真実
+・事実A｜簡潔な根拠説明｜参考: 媒体名, 媒体名, 媒体名
+・事実B｜...
+
+■ 虚偽
+・事実C｜簡潔な根拠説明｜参考: 媒体名, 媒体名, 媒体名
+
+■ 不明瞭
+・事実D｜判断に足る公開情報が不足｜参考: 媒体名, 媒体名, 媒体名
+
+【補足ルール】
+・「不明瞭」の判定基準は「公開情報が乏しい」「一次資料間で結論が分かれる」など、どちらとも確定できない場合とします
+・引用元は必ず媒体名にリンクを埋め込むこと（URLは本文に表示しない）
+・判定プロセスで矛盾や疑義が見つかった場合は、メモとして指摘し、調査を継続してください
+・箇条書きには必ず「・」を使用し、Markdownの「-」「*」などの自動変換記号は使わないでください
+
+入力記事: {{draft_article}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">fact_check_report</span>
+                                <span class="var-desc">ファクトチェック結果（真実/虚偽/不明瞭）</span>
+                            </div>
+                            <div class="output-var">
+                                <span class="var-name">corrected_article</span>
+                                <span class="var-desc">修正済み記事</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑪ Claude ノード（最終リライト） -->
+                <section class="workflow-node-section">
+                    <div class="node-header claude">
+                        <div class="node-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑪ Claude ノード（最終リライト・品質向上）</h2>
+                            <p>読みやすさとトーンの最終調整</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-config">
+                            <h3><i class="fas fa-brain"></i> モデル設定</h3>
+                            <div class="model-info">Claude 3.5 Sonnet / Claude 4</div>
+                        </div>
+                        <div class="prompt-section">
+                            <h3><i class="fas fa-comment-dots"></i> プロンプト例</h3>
+                            <div class="prompt-container">
+                                <pre><code class="language-text">以下の記事を読みやすくブラッシュアップしてください。
+
+【リライト要件】
+- 冗長表現を削除
+- 文末を敬体で統一
+- 読者が理解しやすいように箇条書きを追加
+- FAQは会話調に調整
+- 段落構成を最適化
+- ペルソナ「{{persona_profile}}」に合わせたトーン調整
+
+入力: {{corrected_article}}</code></pre>
+                                <button class="copy-btn" onclick="copyPrompt(this)">
+                                    <i class="fas fa-copy"></i> コピー
+                                </button>
+                            </div>
+                        </div>
+                        <div class="node-output">
+                            <h3><i class="fas fa-arrow-right"></i> 出力変数</h3>
+                            <div class="output-var">
+                                <span class="var-name">final_article</span>
+                                <span class="var-desc">最終調整済み記事</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ⑫ End ノード（SEO記事完成） -->
+                <section class="workflow-node-section">
+                    <div class="node-header end">
+                        <div class="node-icon">
+                            <i class="fas fa-flag-checkered"></i>
+                        </div>
+                        <div class="node-info">
+                            <h2>⑫ End ノード（SEO記事完成）</h2>
+                            <p>QuestionとAnswerのズレがない、高品質なSEO記事の完成</p>
+                        </div>
+                    </div>
+                    <div class="node-content">
+                        <div class="node-output">
+                            <h3><i class="fas fa-file-export"></i> 出力</h3>
+                            <div class="output-final">
+                                <div class="final-output-item">
+                                    <i class="fas fa-file-alt"></i>
+                                    <div>
+                                        <strong>完成記事（Markdown）</strong>
+                                        <code>{{final_article}}</code>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-tags"></i>
+                                    <div>
+                                        <strong>メタ情報</strong>
+                                        <span>title/desc/slug/OG案</span>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-check-double"></i>
+                                    <div>
+                                        <strong>ファクトチェック結果</strong>
+                                        <code>{{fact_check_report}}</code>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-bullseye"></i>
+                                    <div>
+                                        <strong>差別化戦略</strong>
+                                        <code>{{differentiation_opportunities}}</code>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-database"></i>
+                                    <div>
+                                        <strong>一次情報ソース</strong>
+                                        <code>{{primary_sources}}</code>
+                                    </div>
+                                </div>
+                                <div class="final-output-item">
+                                    <i class="fas fa-link"></i>
+                                    <div>
+                                        <strong>内部リンク候補</strong>
+                                        <code>{{sources}}</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="implementation-tips">
+                <h2><i class="fas fa-lightbulb"></i> 実装のポイント</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>エラーハンドリング</h3>
+                        <p>各ノードでタイムアウトやAPI制限に対する適切なエラーハンドリングを実装する</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>パフォーマンス最適化</h3>
+                        <p>並列実行可能な部分は並列化し、処理時間の短縮を図る</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>セキュリティ</h3>
+                        <p>APIキーは環境変数で管理し、ログに機密情報が残らないよう注意</p>
+                    </div>
+                    <div class="tip-card">
+                        <i class="fas fa-cog"></i>
+                        <h3>設定の柔軟性</h3>
+                        <p>プロンプトやパラメータは外部設定ファイルで管理し、調整しやすくする</p>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
-    <script src="assets/js/shared-content.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
+            <p>
+                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        function copyPrompt(button) {
+            const codeBlock = button.previousElementSibling.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> コピー完了';
+                button.style.background = '#28a745';
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
