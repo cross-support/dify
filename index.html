@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dify SEO記事自動執筆システム - プロジェクト管理サイト</title>
+    <title>AI別SEO記事自動化フロー設計とモデル比較（完全版） | Dify SEO記事自動執筆システム</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -15,7 +15,7 @@
                 Dify SEO記事自動執筆システム
             </h1>
             <ul class="nav-menu">
-                <li><a href="#home" class="nav-link active">ホーム</a></li>
+                <li><a href="index.html" class="nav-link active">ホーム</a></li>
                 <li><a href="menu.html" class="nav-link">メニュー</a></li>
                 <li><a href="requirements.html" class="nav-link">要件定義</a></li>
                 <li><a href="implementation.html" class="nav-link">実装想定</a></li>
@@ -27,204 +27,12 @@
         </div>
     </nav>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1>AI×人によるSEO記事量産システム</h1>
-                    <p class="hero-subtitle">
-                        Difyを活用して、競合調査から最終リライトまでを自動化し、<br>
-                        高品質なSEO記事を継続的に量産するワークフローシステム
-                    </p>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">6</div>
-                            <div class="stat-label">自動化ステップ</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">3</div>
-                            <div class="stat-label">AI モデル連携</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">8+</div>
-                            <div class="stat-label">月間記事目標</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="overview">
-            <div class="container">
-                <h2 class="section-title">システム概要</h2>
-                <div class="workflow-diagram">
-                    <div class="workflow-step">
-                        <div class="step-icon">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <h3>競合調査</h3>
-                        <p>上位記事の分析・要約</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <div class="step-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3>検索意図・ペルソナ</h3>
-                        <p>Geminiによる分析</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <div class="step-icon">
-                            <i class="fas fa-list"></i>
-                        </div>
-                        <h3>見出し設計</h3>
-                        <p>反復ループで精度向上</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <div class="step-icon">
-                            <i class="fas fa-pen"></i>
-                        </div>
-                        <h3>本文生成</h3>
-                        <p>GPT-4による執筆</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <div class="step-icon">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <h3>ファクトチェック</h3>
-                        <p>RAG参照で精度向上</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <div class="step-icon">
-                            <i class="fas fa-edit"></i>
-                        </div>
-                        <h3>最終リライト</h3>
-                        <p>Claudeによる文章調整</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="features">
-            <div class="container">
-                <h2 class="section-title">主要機能</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-sync"></i>
-                        </div>
-                        <h3>反復精査ループ</h3>
-                        <p>知識ギャップを自動検出し、追加リサーチで情報を補完。競合記事の80%以上を網羅する構成案を生成。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <h3>マルチAI連携</h3>
-                        <p>GPT-4・Gemini・Claudeの特性を活かした役割分担で、各工程に最適なモデルを使用。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-database"></i>
-                        </div>
-                        <h3>RAG基盤</h3>
-                        <p>法規PDF・社内資料を知識ベース化し、根拠に基づいたファクトチェックを実現。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3>品質指標</h3>
-                        <p>完読率・離脱率・再検索兆候を監視し、継続的な品質改善を実現。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="tech-stack">
-            <div class="container">
-                <h2 class="section-title">技術スタック</h2>
-                <div class="tech-grid">
-                    <div class="tech-item">
-                        <img src="https://docs.dify.ai/img/logo.svg" alt="Dify" class="tech-logo">
-                        <span>Dify</span>
-                    </div>
-                    <div class="tech-item">
-                        <i class="fab fa-openai"></i>
-                        <span>OpenAI GPT-4</span>
-                    </div>
-                    <div class="tech-item">
-                        <i class="fab fa-google"></i>
-                        <span>Google Gemini</span>
-                    </div>
-                    <div class="tech-item">
-                        <i class="fas fa-robot"></i>
-                        <span>Anthropic Claude</span>
-                    </div>
-                    <div class="tech-item">
-                        <i class="fas fa-wordpress"></i>
-                        <span>WordPress</span>
-                    </div>
-                    <div class="tech-item">
-                        <i class="fas fa-markdown"></i>
-                        <span>Markdown</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="project-status">
-            <div class="container">
-                <h2 class="section-title">プロジェクト進捗</h2>
-                <div class="status-grid">
-                    <div class="status-card">
-                        <h3>要件定義</h3>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 100%"></div>
-                        </div>
-                        <span class="status-label completed">完了</span>
-                    </div>
-                    <div class="status-card">
-                        <h3>システム設計</h3>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 80%"></div>
-                        </div>
-                        <span class="status-label in-progress">進行中</span>
-                    </div>
-                    <div class="status-card">
-                        <h3>MVP開発</h3>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 30%"></div>
-                        </div>
-                        <span class="status-label planned">計画中</span>
-                    </div>
-                    <div class="status-card">
-                        <h3>本格運用</h3>
-                        <div class="progress-bar">
-                            <div class="progress" style="width: 0%"></div>
-                        </div>
-                        <span class="status-label planned">未着手</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <main class="shared-content-wrapper">
+        <div class="content-container">
+            <pre data-shared-content></pre>
+        </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 株式会社クロスリンク - Dify SEO記事自動執筆システム</p>
-            <p>
-                <a href="https://github.com/masakinakano-cpc/dify" target="_blank">
-                    <i class="fab fa-github"></i> GitHub Repository
-                </a>
-            </p>
-        </div>
-    </footer>
-
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/shared-content.js"></script>
 </body>
 </html>
