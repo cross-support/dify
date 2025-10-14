@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
             line-height: 1.8;
             color: #e0e0e0;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a0f2e 25%, #0f1a2e 50%, #0a1520 75%, #0a0a0f 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #151518 25%, #1a1a1f 50%, #151518 75%, #0a0a0a 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
             padding: 20px;
@@ -30,22 +30,23 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+            background: linear-gradient(180deg, #1a1a1f 0%, #252530 50%, #1a1a1f 100%);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(15, 25, 50, 0.9), 0 0 100px rgba(75, 0, 130, 0.3);
+            box-shadow: 0 20px 60px rgba(192, 192, 192, 0.3), 0 0 150px rgba(200, 200, 210, 0.4), 0 0 200px rgba(192, 192, 192, 0.3);
             overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, #0f0a1a 0%, #1a1a3e 50%, #2a1a4e 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, #2a2a2f 0%, #3a3a45 50%, #4a4a55 100%);
+            color: #e8e8f0;
             padding: 60px 40px 20px 40px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 1001;
             overflow: visible;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 30px rgba(192, 192, 210, 0.6), 0 0 60px rgba(200, 200, 220, 0.4);
+            text-shadow: 0 0 15px rgba(192, 192, 210, 0.5), 0 0 30px rgba(200, 200, 220, 0.3);
         }
 
         header::before {
@@ -55,9 +56,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(75, 0, 130, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(25, 25, 112, 0.3) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(192, 192, 210, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(200, 200, 220, 0.4) 0%, transparent 50%);
             pointer-events: none;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
         }
 
         header h1, header p {
@@ -98,23 +105,25 @@
 
         nav a {
             text-decoration: none;
-            color: #e0e0e0;
+            color: #d8d8e8;
             padding: 8px 15px;
             border-radius: 20px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%);
-            border: 2px solid #4a5568;
+            background: linear-gradient(135deg, #2a2a2f 0%, #3a3a40 100%);
+            border: 2px solid #8a8a9a;
             transition: all 0.3s;
             font-weight: 600;
             font-size: 0.85rem;
             white-space: nowrap;
             display: inline-block;
+            box-shadow: 0 0 10px rgba(192, 192, 210, 0.2);
         }
 
         nav a:hover {
-            background: linear-gradient(135deg, #2a2a4e 0%, #3a3a5e 100%);
+            background: linear-gradient(135deg, #3a3a45 0%, #4a4a55 100%);
             color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(75, 0, 130, 0.5), 0 0 15px rgba(75, 0, 130, 0.3);
+            box-shadow: 0 4px 15px rgba(200, 200, 220, 0.6), 0 0 30px rgba(192, 192, 210, 0.4);
+            text-shadow: 0 0 10px rgba(192, 192, 210, 0.6);
         }
 
         .content {
@@ -139,33 +148,37 @@
         }
 
         h2 {
-            color: #ffffff;
+            color: #e8e8f0;
             font-size: 2rem;
             margin-bottom: 30px;
             padding-bottom: 15px;
-            border-bottom: 4px solid #4a5568;
+            border-bottom: 4px solid #9a9aaa;
             position: relative;
+            text-shadow: 0 0 15px rgba(200, 200, 220, 0.4), 0 0 30px rgba(192, 192, 210, 0.3);
         }
 
         h2::before {
             content: "■";
-            color: #6b7280;
+            color: #b0b0c0;
             margin-right: 10px;
+            text-shadow: 0 0 10px rgba(192, 192, 210, 0.5);
         }
 
         h3 {
-            color: #e0e0e0;
+            color: #d8d8e8;
             font-size: 1.5rem;
             margin: 30px 0 20px 0;
             padding-left: 15px;
-            border-left: 5px solid #4a5568;
+            border-left: 5px solid #9a9aaa;
+            text-shadow: 0 0 10px rgba(192, 192, 210, 0.3);
         }
 
         h4 {
-            color: #d1d5db;
+            color: #c8c8d8;
             font-size: 1.2rem;
             margin: 20px 0 15px 0;
             font-weight: 600;
+            text-shadow: 0 0 8px rgba(192, 192, 210, 0.25);
         }
 
         .principle-box {
